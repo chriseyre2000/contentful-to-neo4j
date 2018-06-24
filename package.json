@@ -1,0 +1,14 @@
+{
+  "name": "contentful-to-neo4j",
+  "version": "1.0.0",
+  "description": "This maps a contentful space to a neo4j database.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@chriseyre2000",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "contentful": "^6.1.1"
+  }
+}
