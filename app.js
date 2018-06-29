@@ -6,6 +6,10 @@ global.Headers = fetch.Headers;
 
 const neo4j = require('neo4j-driver').v1;
 
+function isArray(arr) {
+  return arr instanceof Array;
+}
+
 const client = createClient({
   // This is the space ID. A space is like a project folder in Contentful terms
   space: process.env.SPACE_ID,
@@ -67,17 +71,6 @@ client.getEntries({
     
     const firstItemFields = entries.items[0].fields;  
 
-    // Object.keys(firstItemFields).forEach( (k) => {
-    //   console.log(k + ' ' + typeof( firstItemFields[k] ));
-    // })
-
-    // entries.items[0].fields.forEach( (f) => {
-    //     console.log(JSON.stringify(f));
-    // });
-
-    //console.log( JSON.stringify(entries.items[0].fields)); 
-    
-
     entries.items.forEach( (e, i) =>  {
       
       // Bare entry
@@ -97,32 +90,46 @@ client.getEntries({
             //console.log("String field: ", cmd);
             cypherCommand(session, cmd, {valueParam: fields[f]});
         } else {
-
+          // Now handle the complex types:
           let fieldValue = fields[f];
-            
-          if (fieldValue.sys && fieldValue.sys.type == "Asset") {
+          
+          if (isArray(fieldValue)) {
+            fieldValue.forEach( v => {
+              if (v.sys && v.sys.type == "Asset") {
+                relationships.push( {id: e.sys.id, otherId: v.sys.id, relation: f } )    
+              } else if ( v.sys && v.sys.type == "Entry" ) {
+                relationships.push( {id: e.sys.id, otherId: v.sys.id, relation: f } )    
+              } else {
+                console.log ( f + ' is an array of unhandled type ' + typeof(v))
+              } 
+            });
+          } else if (fieldValue.sys && fieldValue.sys.type == "Asset") {
+            relationships.push( {id: e.sys.id, otherId: fieldValue.sys.id, relation: f } )
+          } else if (fieldValue.sys && fieldValue.sys.type == "Entry") {
             relationships.push( {id: e.sys.id, otherId: fieldValue.sys.id, relation: f } )
           } else {
-            console.log('UNKNOWN FIELD: ' + f + ' ' + typeof(fieldValue)/* + JSON.stringify( fields[f] ) */ );
-            if ( f == "modules") {
+            console.log('UNKNOWN FIELD: ' + f + ' ' + typeof(fieldValue) );
+            if ( f == "course") {
                   console.log( JSON.stringify(fieldValue) );
             }
           }
-        }
-        
+        }     
       });
 
     });
 
+     // Run this after the nodes have been created.
      setTimeout( () => {
          console.log("We found " +  relationships.length + " relationships")
 
          relationships.forEach( r => {
            const cmd = `MATCH (a {cmsid: '${r.id}'}), (b {cmsid: '${r.otherId}'} ) CREATE (a) -[r:${r.relation}]-> (b)`;
 
-           console.log(cmd);
+          // console.log(cmd);
            cypherCommand(session, cmd); 
-         })}, 0); 
+         })
+              
+      }, 0); 
 
    }
  );
