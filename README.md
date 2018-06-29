@@ -33,8 +33,5 @@ The contentful access token is the read-only publish token (it would work with t
 Known issues:
 
 - Embedded images are not referenced.
-- Seems to hang at end - need to close the session when done.
 - No tests.
-- No batching of commands.
 - Only handles string and number primitives in fields.
-- No paging of contentful
