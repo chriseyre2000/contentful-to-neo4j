@@ -17,8 +17,8 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN
 });
 
-const uri =  'bolt://localhost'; 
-const user = 'neo4j';
+const uri = process.env.NEO4J_SERVER || 'bolt://localhost'; 
+const user = process.env.NEO4j_USER || 'neo4j';
 const password = process.env.NEO4J_PASSWORD;
 
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
@@ -34,12 +34,80 @@ const cypherCommand = ( session, cmd, params ) => {
   } );
 }
 
-let relationships = [];
-
+// Empty the graph
 cypherCommand(session, "MATCH (a)-[m]-(b) DELETE m");
 cypherCommand(session, "MATCH (a) DELETE a");
 
+let relationships = [];
+
 // create assets
+
+const processAssets = (assets) => {
+  console.log("Assets:", assets.items.length)
+
+  assets.items.forEach( (asset) => {
+    cypherCommand(session, `CREATE (a:asset {cmsid: '${asset.sys.id}', cmstype: '${asset.sys.type}', title: '${asset.fields.title}', url: '${asset.fields.file.url}'} ) RETURN a`)
+  });
+}
+
+const processEntries = (entries) => {
+  console.log("Entries:", entries.items.length)
+  
+  entries.items.forEach( (entry) =>  {
+  
+    // Bare entry
+    const cmd = `CREATE (a:${entry.sys.contentType.sys.id} {cmsid: '${entry.sys.id}', cmstype: '${entry.sys.type}'} ) RETURN a`;
+    cypherCommand(session, cmd);
+
+    // Work on fields and relationships
+    const fields = entry.fields;
+
+    Object.keys(fields).forEach( (fieldName) => {
+
+      let fieldValue = fields[fieldName];
+
+      if ( typeof(fieldValue) == "number" ) {
+        let cmd = `MATCH (a {cmsid: '${entry.sys.id}'}) SET a.${fieldName} = ${ fieldValue } RETURN a`
+        cypherCommand(session, cmd);
+      } else if ( typeof(fieldValue) == "string" ) {
+        let cmd = `MATCH (a {cmsid: '${entry.sys.id}'}) SET a.${fieldName} = {valueParam} RETURN a`
+        cypherCommand(session, cmd, {valueParam: fieldValue});
+      } else if (isArray(fieldValue)) {
+        fieldValue.forEach( (v, i) => {
+          if (v.sys && v.sys.type) {
+            relationships.push( {id: entry.sys.id, otherId: v.sys.id, relation: fieldName, order: i  } )    
+          } else {
+            // This will fail if we ever see an array of primitive types
+            console.log ( fieldName + ' is an array of unhandled type ' + typeof(v))
+          } 
+        });
+      } else if (fieldValue.sys && fieldValue.sys.type) {
+        relationships.push( {id: entry.sys.id, otherId: fieldValue.sys.id, relation: fieldName } )
+      } else {
+        console.log('UNKNOWN FIELD: ' + fieldName + ' ' + typeof(fieldValue) );
+      }
+    });
+  });
+
+    // Run this after the nodes have been created.
+    setTimeout( processRelationships, 0); 
+  }
+
+  const processRelationships = () => {
+    console.log("We found " +  relationships.length + " relationships")
+  
+    relationships.forEach( relationship => {
+      if (relationship.order) {
+        let cmd1 = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation} {order: ${relationship.order}} ]-> (b)`;
+        cypherCommand(session, cmd1);
+      } else {
+        let cmd = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation}]-> (b)`;
+        cypherCommand(session, cmd);
+      }
+       
+    })
+         
+  }
 
 //TODO: implement paging once we have a space with > 1000 assets
 client.getAssets({
@@ -47,90 +115,15 @@ client.getAssets({
   limit: 1000,
   order: 'sys.createdAt'
 })
-.then((assets) => {
-  console.log("Assets:", assets.items.length)
-
-    const assetDetails = assets.items.forEach( (v) => {
-    //  console.log('.');
-      cypherCommand(session, `CREATE (a:asset {cmsid: '${v.sys.id}', cmstype: '${v.sys.type}', title: '${v.fields.title}', url: '${v.fields.file.url}'} ) RETURN a`)
-    });
-  }
-);
+.then(processAssets);
 
 // create entries
-
 //TODO: implement paging when we have a space with > 1000 entries
 client.getEntries({
   skip: 0,
   limit: 1000,
   order: 'sys.createdAt'
 })
-.then(
-  (entries) => {
-    console.log("Entries:", entries.items.length)
-    
-    const firstItemFields = entries.items[0].fields;  
+.then(processEntries);
 
-    entries.items.forEach( (e, i) =>  {
-      
-      // Bare entry
-      const cmd = `CREATE (a:${e.sys.contentType.sys.id} {cmsid: '${e.sys.id}', cmstype: '${e.sys.type}'} ) RETURN a`;
-      //console.log("Entry: " + cmd );
-      cypherCommand(session, cmd);
-
-      // Work on fields and relationships
-      const fields = e.fields;
-
-      Object.keys(fields).forEach( (f) => {
-        if ( typeof(fields[f]) == "number" ) {
-          let cmd = `MATCH (a {cmsid: '${e.sys.id}'}) SET a.${f} = ${ fields[f] } RETURN a`
-          cypherCommand(session, cmd);
-        } else if ( typeof(fields[f]) == "string" ) {
-            let cmd = `MATCH (a {cmsid: '${e.sys.id}'}) SET a.${f} = {valueParam} RETURN a`
-            //console.log("String field: ", cmd);
-            cypherCommand(session, cmd, {valueParam: fields[f]});
-        } else {
-          // Now handle the complex types:
-          let fieldValue = fields[f];
-          
-          if (isArray(fieldValue)) {
-            fieldValue.forEach( v => {
-              if (v.sys && v.sys.type == "Asset") {
-                relationships.push( {id: e.sys.id, otherId: v.sys.id, relation: f } )    
-              } else if ( v.sys && v.sys.type == "Entry" ) {
-                relationships.push( {id: e.sys.id, otherId: v.sys.id, relation: f } )    
-              } else {
-                console.log ( f + ' is an array of unhandled type ' + typeof(v))
-              } 
-            });
-          } else if (fieldValue.sys && fieldValue.sys.type == "Asset") {
-            relationships.push( {id: e.sys.id, otherId: fieldValue.sys.id, relation: f } )
-          } else if (fieldValue.sys && fieldValue.sys.type == "Entry") {
-            relationships.push( {id: e.sys.id, otherId: fieldValue.sys.id, relation: f } )
-          } else {
-            console.log('UNKNOWN FIELD: ' + f + ' ' + typeof(fieldValue) );
-            if ( f == "course") {
-                  console.log( JSON.stringify(fieldValue) );
-            }
-          }
-        }     
-      });
-
-    });
-
-     // Run this after the nodes have been created.
-     setTimeout( () => {
-         console.log("We found " +  relationships.length + " relationships")
-
-         relationships.forEach( r => {
-           const cmd = `MATCH (a {cmsid: '${r.id}'}), (b {cmsid: '${r.otherId}'} ) CREATE (a) -[r:${r.relation}]-> (b)`;
-
-          // console.log(cmd);
-           cypherCommand(session, cmd); 
-         })
-              
-      }, 0); 
-
-   }
- );
-
+ 

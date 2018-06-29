@@ -19,6 +19,8 @@ Set the following environment variables (windows version, use export or prefix o
 ``` SET SPACE_ID=xxx ```
 ``` SET CONTENTFUL_ACCESS_TOKEN=yyy```
 ``` SET NEO4J_PASSWORD=badpassword```
+``` SET NEO4j_USER=neo4j // defaults to neo4j ```
+``` SET NEO4J_SERVER=bolt://localhost ```
 
 ```node index.js```
 
@@ -26,12 +28,9 @@ The contentful access token is the read-only publish token (it would work with t
 
 Known issues:
 
-1. Lists are not ordered.
-2. Embedded images are not referenced.
-3. Seems to hang at end - need to close the session when done.
-4. No tests.
-5. No batching of commands.
-6. Only works with a local neo4j client.
-7. Assumes the neo4j user account is being used.
-8. Only handles string and number primitives.
-9. No paging of contentful
+1. Embedded images are not referenced.
+2. Seems to hang at end - need to close the session when done.
+3. No tests.
+4. No batching of commands.
+5. Only handles string and number primitives in fields.
+6. No paging of contentful
