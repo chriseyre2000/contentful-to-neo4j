@@ -11,9 +11,9 @@ function isArray(arr) {
 }
 
 const client = createClient({
-  // This is the space ID. A space is like a project folder in Contentful terms
+  // This is the space ID. 
   space: process.env.SPACE_ID,
-  // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
+  // This is the access token for this space.
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
   resolveLinks: false,
 });
@@ -21,10 +21,9 @@ const client = createClient({
 const uri = process.env.NEO4J_SERVER || 'bolt://localhost'; 
 const user = process.env.NEO4j_USER || 'neo4j';
 const password = process.env.NEO4J_PASSWORD;
-
+const contentfulBatchSize = process.env.CONTENTFUL_BATCH_SIZE || 500;
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 const session = driver.session();
-
 var transaction = session.beginTransaction();
 
 const cypherCommand = (cmd, params) => {
@@ -37,9 +36,11 @@ cypherCommand("MATCH (a) DELETE a");
 
 let relationships = [];
 
-// create assets
+const storeRelationship = (data) => {
+  relationships.push(data)
+} 
 
-const processAssets = (assets, skip, limit) => {
+const processAssets = (assets, skip, limit, next = fetchEntries) => {
     
   console.log("Assets:", assets.items.length)
 
@@ -50,11 +51,11 @@ const processAssets = (assets, skip, limit) => {
   if ((skip + limit) <= assets.total) {
     fetchAssets(skip + limit, limit);
   } else {
-    fetchEntries(0, limit);
+    next(limit);
   }
 }
 
-const processEntries = (entries, skip, limit) => {
+const processEntries = (entries, skip, limit, next = processRelationships ) => {
   console.log("Entries:", entries.items.length);
   
   entries.items.forEach( (entry) =>  {
@@ -79,14 +80,14 @@ const processEntries = (entries, skip, limit) => {
       } else if (isArray(fieldValue)) {
         fieldValue.forEach( (v, i) => {
           if (v.sys && v.sys.type) {
-            relationships.push( {id: entry.sys.id, otherId: v.sys.id, relation: fieldName, order: i  } )    
+            storeRelationship( {id: entry.sys.id, otherId: v.sys.id, relation: fieldName, order: i  } )    
           } else {
             // This will fail if we ever see an array of primitive types
             console.log ( fieldName + ' is an array of unhandled type ' + typeof(v))
           } 
         });
       } else if (fieldValue.sys && fieldValue.sys.type) {
-        relationships.push( {id: entry.sys.id, otherId: fieldValue.sys.id, relation: fieldName } )
+        storeRelationship( {id: entry.sys.id, otherId: fieldValue.sys.id, relation: fieldName } )
       } else {
         console.log('UNKNOWN FIELD: ' + fieldName + ' ' + typeof(fieldValue) );
       }
@@ -94,15 +95,13 @@ const processEntries = (entries, skip, limit) => {
   });
 
   if ((skip + limit) <=  entries.total) {
-    console.log("Trying again");
     fetchEntries(skip + limit, limit);
   } else {
-    processRelationships()
+    next()
   }
-
 }
 
-const processRelationships = () => {
+const processRelationships = (next = finish) => {
   console.log("We found " +  relationships.length + " relationships")
 
   relationships.forEach( relationship => {
@@ -113,9 +112,12 @@ const processRelationships = () => {
       let cmd = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation}]-> (b)`;
       cypherCommand(cmd);
     }
-      
   });
 
+  next();
+}
+
+const finish = () => {
   transaction.commit().then(
     () => {
       session.close( () => {
@@ -125,7 +127,7 @@ const processRelationships = () => {
   });
 }
 
-const fetchAssets = (skip, limit) => {  
+const fetchAssets = (limit, skip = 0) => {  
   client.getAssets({
     skip: skip,
     limit: limit,
@@ -134,7 +136,7 @@ const fetchAssets = (skip, limit) => {
   .then( assets => processAssets(assets, skip, limit) );  
 }
 
-const fetchEntries = (skip, limit) => { 
+const fetchEntries = (limit, skip = 0) => { 
   client.getEntries({
     skip: skip,
     limit: limit,
@@ -143,4 +145,4 @@ const fetchEntries = (skip, limit) => {
   .then(entries => processEntries(entries, skip, limit)); 
 }
  
-fetchAssets(0, 100);
+fetchAssets(contentfulBatchSize);

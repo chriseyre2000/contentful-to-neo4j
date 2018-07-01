@@ -23,7 +23,8 @@ SET SPACE_ID=xxx
 SET CONTENTFUL_ACCESS_TOKEN=yyy
 SET NEO4J_PASSWORD=badpassword
 SET NEO4j_USER=neo4j // defaults to neo4j 
-SET NEO4J_SERVER=bolt://localhost 
+SET NEO4J_SERVER=bolt://localhost
+SET CONTENTFUL_BATCH_SIZE=1000 // defaults to 500 
 
 node index.js
 ```
