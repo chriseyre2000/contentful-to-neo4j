@@ -34,5 +34,4 @@ The contentful access token is the read-only publish token (it would work with t
 Known issues:
 
 - Embedded images are not referenced.
-- No tests.
 - Only handles string and number primitives in fields.
