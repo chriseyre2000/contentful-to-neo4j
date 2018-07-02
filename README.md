@@ -10,21 +10,23 @@ This is still in early development.
 
 So far I can read entries and assets from contentful.
 
-I can now create relationships for images and non-primitive fields. 
+I can now create relationships for images and non-primitive fields.
 
 WARNING - this will clean out the neo4j database before populating it from contentful
 
 Usage:
 
+npm install
+
 Set the following environment variables (windows version, use export or prefix on unix system):
 
-``` 
-SET SPACE_ID=xxx 
+```
+SET SPACE_ID=xxx
 SET CONTENTFUL_ACCESS_TOKEN=yyy
 SET NEO4J_PASSWORD=badpassword
-SET NEO4j_USER=neo4j // defaults to neo4j 
+SET NEO4j_USER=neo4j // defaults to neo4j
 SET NEO4J_SERVER=bolt://localhost
-SET CONTENTFUL_BATCH_SIZE=1000 // defaults to 500 
+SET CONTENTFUL_BATCH_SIZE=1000 // defaults to 500
 
 node index.js
 ```
@@ -34,4 +36,3 @@ The contentful access token is the read-only publish token (it would work with t
 Known issues:
 
 - Embedded images are not referenced.
-- Only handles string and number primitives in fields.

@@ -9,7 +9,6 @@
   "author": "@chriseyre2000",
   "license": "MPL-2.0",
   "dependencies": {
-    "babel-jest": "^23.2.0",
     "contentful": "^6.1.1",
     "fetch-headers": "^2.0.0",
     "neo4j-driver": "^1.6.1",
@@ -18,6 +17,7 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",
+    "babel-jest": "^23.2.0",
     "jest": "^23.2.0"
   }
 }
