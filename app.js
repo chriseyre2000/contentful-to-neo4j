@@ -47,7 +47,7 @@ const finish = () => {
   });
 }
 
-const fetchAssets = (client, limit, skip = 0) => {  
+const fetchAssets = (limit, skip = 0) => {  
   contentfulClient.getAssets({
     skip: skip,
     limit: limit,
