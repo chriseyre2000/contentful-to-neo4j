@@ -3,8 +3,8 @@ import {
   processAssets, 
   processEntries, 
   storeRelationship, 
-  processRelationships, 
-  afterProcessAssets  } from './contentfulProcessing';
+  processRelationships
+} from './contentfulProcessing';
 
 // This is a polyfill for "Headers is not defined"  
 const fetch = require('node-fetch');
@@ -46,6 +46,8 @@ const finish = () => {
       });
   });
 }
+
+
 
 const fetchAssets = (limit, skip = 0) => {  
   contentfulClient.getAssets({
