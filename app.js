@@ -1,5 +1,10 @@
 import { createClient } from 'contentful';
-import { processAssets, processEntries, storeRelationship, processRelationships  } from './contentfulProcessing';
+import { 
+  processAssets, 
+  processEntries, 
+  storeRelationship, 
+  processRelationships, 
+  afterProcessAssets  } from './contentfulProcessing';
 
 // This is a polyfill for "Headers is not defined"  
 const fetch = require('node-fetch');
@@ -7,7 +12,7 @@ global.Headers = fetch.Headers;
 
 const neo4j = require('neo4j-driver').v1;
 
-const client = createClient({
+const contentfulClient = createClient({
   // This is the space ID. 
   space: process.env.SPACE_ID,
   // This is the access token for this space.
@@ -42,8 +47,8 @@ const finish = () => {
   });
 }
 
-const fetchAssets = (limit, skip = 0) => {  
-  client.getAssets({
+const fetchAssets = (client, limit, skip = 0) => {  
+  contentfulClient.getAssets({
     skip: skip,
     limit: limit,
     order: 'sys.createdAt'
@@ -52,7 +57,7 @@ const fetchAssets = (limit, skip = 0) => {
 }
 
 const fetchEntries = (limit, skip = 0) => { 
-  client.getEntries({
+  contentfulClient.getEntries({
     skip: skip,
     limit: limit,
     order: 'sys.createdAt'

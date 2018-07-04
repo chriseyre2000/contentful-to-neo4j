@@ -11,15 +11,21 @@ const processAssets = (assets, skip, limit, dbCommand, currentFetch, nextFetch) 
     console.log("Assets:", assets.items.length)
 
     assets.items.forEach( (asset) => {
-      dbCommand(`CREATE (a:asset {cmsid: '${asset.sys.id}', cmstype: '${asset.sys.type}', title: '${asset.fields.title}', url: '${asset.fields.file.url}'} ) RETURN a`)
+      dbCommand(`CREATE (a:asset {cmsid: '${asset.sys.id}', cmstype: '${asset.sys.type}', title: {titleParam}, url: '${asset.fields.file.url}'} ) RETURN a`, {titleParam: asset.fields.title})
     });
 
-    if ((skip + limit) <= assets.total) {
+    afterProcessAssets(skip, limit, assets.total, currentFetch, nextFetch);
+  }
+
+  const afterProcessAssets = (skip, limit, assetsTotal, currentFetch, nextFetch)  => {
+    if ((skip + limit) <= assetsTotal) {
       currentFetch(skip + limit, limit);
-    } else {
+    }
+    else {
       nextFetch(limit);
     }
   }
+  
 
 
   const processEntries = (entries, skip, limit, dbCommand, recordRelationship, currentFetch, nextProcess, endProcess) => {
@@ -100,4 +106,6 @@ const processAssets = (assets, skip, limit, dbCommand, currentFetch, nextFetch) 
     finish();
   }
 
-export { processAssets, processEntries, storeRelationship, processRelationships }
+export { processAssets, afterProcessAssets, processEntries, storeRelationship, processRelationships }
+
+
