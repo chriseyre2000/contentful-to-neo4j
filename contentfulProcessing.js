@@ -14,7 +14,7 @@ const processAssets = (assets, skip, limit, dbCommand, currentFetch, nextFetch) 
       dbCommand(`CREATE (a:asset {cmsid: '${asset.sys.id}', cmstype: '${asset.sys.type}', title: {titleParam}, url: '${asset.fields.file.url}'} ) RETURN a`, {titleParam: asset.fields.title})
     });
 
-    if ((skip + limit) <= assetsTotal) {
+    if ((skip + limit) <= assets.total) {
       currentFetch(skip + limit, limit);
     }
     else {
@@ -100,6 +100,6 @@ const processAssets = (assets, skip, limit, dbCommand, currentFetch, nextFetch) 
     finish();
   }
 
-export { processAssets, afterProcessAssets, processEntries, storeRelationship, processRelationships }
+export { processAssets, processEntries, storeRelationship, processRelationships }
 
 

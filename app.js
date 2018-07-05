@@ -6,26 +6,23 @@ import {
   processRelationships
 } from './contentfulProcessing';
 
-// This is a polyfill for "Headers is not defined"  
+import config from './config';
+
 const fetch = require('node-fetch');
+
+// This is a polyfill for "Headers is not defined"  
 global.Headers = fetch.Headers;
 
 const neo4j = require('neo4j-driver').v1;
 
 const contentfulClient = createClient({
-  // This is the space ID. 
-  space: process.env.SPACE_ID,
+  space: config.contentful.spaceId,
   // This is the access token for this space.
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+  accessToken: config.contentful.accessToken,
   resolveLinks: false,
 });
 
-const uri = process.env.NEO4J_SERVER || 'bolt://localhost'; 
-const user = process.env.NEO4j_USER || 'neo4j';
-const password = process.env.NEO4J_PASSWORD;
-const contentfulBatchSize = process.env.CONTENTFUL_BATCH_SIZE || 500;
-
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
+const driver = neo4j.driver(config.neo4j.uri, neo4j.auth.basic(config.neo4j.user, config.neo4j.password));
 const session = driver.session();
 var transaction = session.beginTransaction();
 
@@ -47,8 +44,6 @@ const finish = () => {
   });
 }
 
-
-
 const fetchAssets = (limit, skip = 0) => {  
   contentfulClient.getAssets({
     skip: skip,
@@ -67,4 +62,4 @@ const fetchEntries = (limit, skip = 0) => {
   .then(entries => processEntries(entries, skip, limit, cypherCommand, storeRelationship, fetchEntries, processRelationships, finish)); 
 }
  
-fetchAssets(contentfulBatchSize);
+fetchAssets(config.contentful.batchSize);

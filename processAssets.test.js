@@ -54,8 +54,10 @@ test('Check Process Large number calls for more assets', () => {
     processAssets(assets, 0, 10, mockDBCommand, mockCurrentFetch, mockNextFetch );
 
     expect(mockDBCommand.mock.calls.length).toBe(2);
-    expect(mockDBCommand.mock.calls[0][0]).toBe("CREATE (a:asset {cmsid: 'first-asset-id', cmstype: 'Asset', title: 'first-asset-title', url: '//first-file-url'} ) RETURN a");
-    expect(mockDBCommand.mock.calls[1][0]).toBe("CREATE (a:asset {cmsid: 'second-asset-id', cmstype: 'Asset', title: 'second-asset-title', url: '//second-file-url'} ) RETURN a");
+    expect(mockDBCommand.mock.calls[0][0]).toBe("CREATE (a:asset {cmsid: 'first-asset-id', cmstype: 'Asset', title: {titleParam}, url: '//first-file-url'} ) RETURN a");
+    expect(mockDBCommand.mock.calls[0][1]).toEqual({"titleParam": "first-asset-title",});
+    
+    expect(mockDBCommand.mock.calls[1][0]).toBe("CREATE (a:asset {cmsid: 'second-asset-id', cmstype: 'Asset', title: {titleParam}, url: '//second-file-url'} ) RETURN a");
     expect(mockCurrentFetch.mock.calls.length).toBe(1);
     expect(mockNextFetch.mock.calls.length).toBe(0);
 
