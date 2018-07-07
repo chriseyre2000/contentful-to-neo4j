@@ -6,12 +6,12 @@ function isPrimitiveNonString(value) {
   return (typeof(value) == "number") || (typeof(value) == "boolean")
 }
 
-const processAssets = (assets, skip, limit, dbCommand, currentFetch, nextFetch) => {
+const processAssets = (neo4jService, assets, skip, limit, currentFetch, nextFetch) => {
 
     console.log("Assets:", assets.items.length)
 
     assets.items.forEach( (asset) => {
-      dbCommand(`CREATE (a:asset {cmsid: '${asset.sys.id}', cmstype: '${asset.sys.type}', title: {titleParam}, url: '${asset.fields.file.url}'} ) RETURN a`, {titleParam: asset.fields.title})
+      neo4jService.cypherCommand(`CREATE (a:asset {cmsid: '${asset.sys.id}', cmstype: '${asset.sys.type}', title: {titleParam}, url: '${asset.fields.file.url}'} ) RETURN a`, {titleParam: asset.fields.title})
     });
 
     if ((skip + limit) <= assets.total) {

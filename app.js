@@ -19,7 +19,7 @@ neo4jService.emptyGraphDatabase();
 
 const fetchAssets = (limit, skip = 0) => {  
   contentfulService.getAssets(limit, skip)
-  .then( assets => processAssets(assets, skip, limit, cypherCommand, fetchAssets, fetchEntries) );  
+  .then( assets => processAssets(neo4jService, assets, skip, limit, fetchAssets, fetchEntries) );  
 }
 
 const fetchEntries = (limit, skip = 0) => { 
