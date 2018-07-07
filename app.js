@@ -13,8 +13,6 @@ import neo4jService from "./neo4jService";
 // // This is a polyfill for "Headers is not defined"  
 // global.Headers = fetch.Headers;
 
-const cypherCommand = neo4jService.cypherCommand;
-
 neo4jService.emptyGraphDatabase();
 
 const fetchAssets = (limit, skip = 0) => {  
@@ -24,7 +22,7 @@ const fetchAssets = (limit, skip = 0) => {
 
 const fetchEntries = (limit, skip = 0) => { 
   contentfulService.getEntries(limit, skip)
-  .then(entries => processEntries(neo4jService, entries, skip, limit, cypherCommand, storeRelationship, fetchEntries, processRelationships)); 
+  .then(entries => processEntries(neo4jService, entries, skip, limit, storeRelationship, fetchEntries, processRelationships)); 
 }
  
 fetchAssets(config.contentful.batchSize);

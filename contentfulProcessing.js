@@ -22,14 +22,14 @@ const processAssets = (neo4jService, assets, skip, limit, currentFetch, nextFetc
     }
   }
 
-  const processEntries = (neo4jService, entries, skip, limit, dbCommand, recordRelationship, currentFetch, nextProcess) => {
+  const processEntries = (neo4jService, entries, skip, limit, recordRelationship, currentFetch, processRelationships) => {
     console.log("Entries:", entries.items.length);
 
     entries.items.forEach( (entry) =>  {
 
       // Bare entry
       const cmd = `CREATE (a:${entry.sys.contentType.sys.id} {cmsid: '${entry.sys.id}', contenttype: '${entry.sys.contentType.sys.id}', cmstype: '${entry.sys.type}'} ) RETURN a`;
-      dbCommand(cmd);
+      neo4jService.cypherCommand(cmd);
 
       // Work on fields and relationships
       const fields = entry.fields;
@@ -40,10 +40,10 @@ const processAssets = (neo4jService, assets, skip, limit, currentFetch, nextFetc
 
         if ( isPrimitiveNonString(fieldValue) ) {
           let cmd = `MATCH (a {cmsid: '${entry.sys.id}'}) SET a.${fieldName} = ${ fieldValue } RETURN a`
-          dbCommand(cmd);
+          neo4jService.cypherCommand(cmd);
         } else if ( typeof(fieldValue) == "string" ) {
           let cmd = `MATCH (a {cmsid: '${entry.sys.id}'}) SET a.${fieldName} = {valueParam} RETURN a`
-          dbCommand(cmd, {valueParam: fieldValue});
+          neo4jService.cypherCommand(cmd, {valueParam: fieldValue});
         } else if (isArray(fieldValue)) {
           let collection = [];
           fieldValue.forEach( (v, i) => {
@@ -73,7 +73,7 @@ const processAssets = (neo4jService, assets, skip, limit, currentFetch, nextFetc
       currentFetch(skip + limit, limit);
     } else {
       //Call process relationships
-      nextProcess(dbCommand, neo4jService.finish);
+      processRelationships(neo4jService);
     }
   }
 
@@ -83,21 +83,20 @@ const processAssets = (neo4jService, assets, skip, limit, currentFetch, nextFetc
     relationships.push(data)
   }
 
-
-  const processRelationships = (dbCommand, finish) => {
+  const processRelationships = (neo4jService) => {
     console.log("We found " +  relationships.length + " relationships")
 
     relationships.forEach( relationship => {
       if (relationship.order) {
         let cmd1 = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation} {order: ${relationship.order}} ]-> (b)`;
-        dbCommand(cmd1);
+        neo4jService.cypherCommand(cmd1);
       } else {
         let cmd = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation}]-> (b)`;
-        dbCommand(cmd);
+        neo4jService.cypherCommand(cmd);
       }
     });
 
-    finish();
+    neo4jService.finish();
   }
 
 export { processAssets, processEntries, storeRelationship, processRelationships }

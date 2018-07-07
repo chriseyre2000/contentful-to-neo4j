@@ -10,13 +10,13 @@ test('Check Process Empty Entries Calls Relationships', () => {
         items: []
     };
 
-    const mockDBCommand = jest.fn();
+    const mockDBCommand = neo4jService.cypherCommand;
     const mockCurrentFetch = jest.fn();
     const mockRecordRelationship = jest.fn();
     const mockNextFetch = jest.fn();
     const mockFinish = neo4jService.finish;
 
-    processEntries(neo4jService, entries, 0, 10, mockDBCommand, mockRecordRelationship, mockCurrentFetch, mockNextFetch);
+    processEntries(neo4jService, entries, 0, 10, mockRecordRelationship, mockCurrentFetch, mockNextFetch);
 
     expect(mockDBCommand.mock.calls.length).toBe(0);
     expect(mockCurrentFetch.mock.calls.length).toBe(0);
@@ -35,13 +35,13 @@ test('Check Process Empty Entries Calls Fetch More', () => {
         items: []
     };
 
-    const mockDBCommand = jest.fn();
+    const mockDBCommand = neo4jService.cypherCommand;
     const mockCurrentFetch = jest.fn();
     const mockRecordRelationship = jest.fn();
     const mockNextFetch = jest.fn();
     const mockFinish = neo4jService.finish;
 
-    processEntries(neo4jService, entries, 0, 10, mockDBCommand, mockRecordRelationship, mockCurrentFetch, mockNextFetch);
+    processEntries(neo4jService, entries, 0, 10, mockRecordRelationship, mockCurrentFetch, mockNextFetch);
 
     expect(mockDBCommand.mock.calls.length).toBe(0);
     expect(mockCurrentFetch.mock.calls.length).toBe(1);
