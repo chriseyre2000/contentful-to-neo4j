@@ -18,13 +18,7 @@ const transformServiceFactory = (contentful, neo4j) => {
         console.log("We found " +  relationships.length + " relationships")
       
           relationships.forEach( relationship => {
-            if (relationship.order) {
-              let cmd1 = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation} {order: ${relationship.order}} ]-> (b)`;
-              neo4j.cypherCommand(cmd1);
-            } else {
-              let cmd = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation}]-> (b)`;
-              neo4j.cypherCommand(cmd);
-            }
+            processRelationship(neo4j, relationship);
           });
       
           neo4j.finish();
@@ -124,3 +118,16 @@ const transformServiceFactory = (contentful, neo4j) => {
 };
 
 export default transformServiceFactory;
+
+function processRelationship(neo4j, relationship) {
+    if (relationship.order) {
+        let cmd1 = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation} {order: ${relationship.order}}]-> (b)`;
+        neo4j.cypherCommand(cmd1);
+    }
+    else {
+        let cmd = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation}]-> (b)`;
+        neo4j.cypherCommand(cmd);
+    }
+}
+
+export { processRelationship }
