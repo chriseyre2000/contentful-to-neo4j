@@ -22,7 +22,7 @@ const processAssets = (assets, skip, limit, dbCommand, currentFetch, nextFetch) 
     }
   }
 
-  const processEntries = (entries, skip, limit, dbCommand, recordRelationship, currentFetch, nextProcess, endProcess) => {
+  const processEntries = (neo4jService, entries, skip, limit, dbCommand, recordRelationship, currentFetch, nextProcess) => {
     console.log("Entries:", entries.items.length);
 
     entries.items.forEach( (entry) =>  {
@@ -73,7 +73,7 @@ const processAssets = (assets, skip, limit, dbCommand, currentFetch, nextFetch) 
       currentFetch(skip + limit, limit);
     } else {
       //Call process relationships
-      nextProcess(dbCommand, endProcess)
+      nextProcess(dbCommand, neo4jService.finish);
     }
   }
 

@@ -17,8 +17,6 @@ const cypherCommand = neo4jService.cypherCommand;
 
 neo4jService.emptyGraphDatabase();
 
-const finish = neo4jService.finish;
-
 const fetchAssets = (limit, skip = 0) => {  
   contentfulService.getAssets(limit, skip)
   .then( assets => processAssets(assets, skip, limit, cypherCommand, fetchAssets, fetchEntries) );  
@@ -26,7 +24,7 @@ const fetchAssets = (limit, skip = 0) => {
 
 const fetchEntries = (limit, skip = 0) => { 
   contentfulService.getEntries(limit, skip)
-  .then(entries => processEntries(entries, skip, limit, cypherCommand, storeRelationship, fetchEntries, processRelationships, finish)); 
+  .then(entries => processEntries(neo4jService, entries, skip, limit, cypherCommand, storeRelationship, fetchEntries, processRelationships)); 
 }
  
 fetchAssets(config.contentful.batchSize);
