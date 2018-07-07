@@ -1,33 +1,34 @@
-import { processEntries } from "./contentfulProcessing";
 import mockNeo4jServiceFactory from "./mocks/mockNeo4jService";
+import mockContentfulServiceFactory from "./mocks/mockContentfulService";
+import transformServiceFactory from "./transformService";
 
-test('Check Process Empty Entries Calls Relationships', () => {
-
+test('Check Process Empty Entries Calls Relationships', (done) => {
+  
+    const contentfulService = mockContentfulServiceFactory();
     const neo4jService = mockNeo4jServiceFactory();
-
+    
     const entries = {
         total: 0,
         items: []
     };
+  
+    contentfulService.getEntries.mockReturnValue( new Promise(() => contentfulService.emptyResult) );
+ 
+    neo4jService.finish.mockReturnValue( new Promise( () => {
+        done();
+      } ));
 
-    const mockDBCommand = neo4jService.cypherCommand;
-    const mockCurrentFetch = jest.fn();
-    const mockRecordRelationship = jest.fn();
-    const mockNextFetch = jest.fn();
-    const mockFinish = neo4jService.finish;
+    const transformService = transformServiceFactory(contentfulService, neo4jService);
+  
+    transformService.processEntries(entries, 0, 10);
+  
+    expect( neo4jService.finish.mock.calls.length).toEqual(1);
+  } );
+  
 
-    processEntries(neo4jService, entries, 0, 10, mockRecordRelationship, mockCurrentFetch, mockNextFetch);
+test('Check Process Entries Calls Fetch More', () => {
 
-    expect(mockDBCommand.mock.calls.length).toBe(0);
-    expect(mockCurrentFetch.mock.calls.length).toBe(0);
-    expect(mockRecordRelationship.mock.calls.length).toBe(0);
-    expect(mockNextFetch.mock.calls.length).toBe(1);
-    expect(mockFinish.mock.calls.length).toBe(0);
-
-} );
-
-test('Check Process Empty Entries Calls Fetch More', () => {
-
+    const contentfulService = mockContentfulServiceFactory();
     const neo4jService = mockNeo4jServiceFactory();
 
     const entries = {
@@ -35,18 +36,16 @@ test('Check Process Empty Entries Calls Fetch More', () => {
         items: []
     };
 
-    const mockDBCommand = neo4jService.cypherCommand;
-    const mockCurrentFetch = jest.fn();
-    const mockRecordRelationship = jest.fn();
-    const mockNextFetch = jest.fn();
-    const mockFinish = neo4jService.finish;
+    contentfulService.getEntries.mockReturnValue( new Promise(() => contentfulService.emptyResult) );
+ 
+    neo4jService.finish.mockReturnValue( new Promise( () => {
+        done();
+      } ));
 
-    processEntries(neo4jService, entries, 0, 10, mockRecordRelationship, mockCurrentFetch, mockNextFetch);
-
-    expect(mockDBCommand.mock.calls.length).toBe(0);
-    expect(mockCurrentFetch.mock.calls.length).toBe(1);
-    expect(mockRecordRelationship.mock.calls.length).toBe(0);
-    expect(mockNextFetch.mock.calls.length).toBe(0);
-    expect(mockFinish.mock.calls.length).toBe(0);
+    const transformService = transformServiceFactory(contentfulService, neo4jService);
+  
+    transformService.processEntries(entries, 0, 10);
+  
+    expect( contentfulService.getEntries.mock.calls.length).toEqual(1);
 
 } );
