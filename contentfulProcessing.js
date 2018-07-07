@@ -15,10 +15,10 @@ const processAssets = (neo4jService, assets, skip, limit, currentFetch, nextFetc
     });
 
     if ((skip + limit) <= assets.total) {
-      currentFetch(skip + limit, limit);
+      currentFetch(limit, skip + limit);
     }
     else {
-      nextFetch(limit);
+      nextFetch(limit, 0);
     }
   }
 
