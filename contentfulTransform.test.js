@@ -4,7 +4,9 @@ import {
     processRelationship
 } from "./contentfulTransform";
 
-import neo4jServiceMockFactory from "./mocks/mockNeo4jService"
+import neo4jServiceMockFactory from "./mocks/mockNeo4jService";
+
+import { entryFactory } from "./mocks/mockContentfulService";
 
 describe("Process Asset Test", () => {
     test("process Asset", () => {
@@ -35,21 +37,6 @@ describe("Process Asset Test", () => {
 });
 
 describe("ProcessEntry Tests", () => {
-    const entryFactory = (contentTypeId, id, fields) => {
-        return {
-            sys: {
-                contentType: {
-                    sys: {
-                        id: `${contentTypeId}`,
-                    }
-                },
-                id: `${id}`,
-                type: "Entry",
-            },
-            fields: fields,
-        }
-    };
-    
     test("ProcessEntry with no fields", () => {
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();

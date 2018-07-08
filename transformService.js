@@ -14,7 +14,7 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     const fetchAssets = (skip) => {
         contentful.getAssets(contentfulBatchSize, skip)
             .then(assets => {
-                processAssets(assets, contentfulBatchSize, skip)
+                processAssets(assets, contentfulBatchSize, skip);
             });
     };
 
@@ -40,7 +40,7 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
         console.log("Entries:", entries.items.length);
 
         entries.items.forEach((entry) => {
-            processEntry(neo4j, storeRelationship, entry);
+            processEntry(neo4j, storeRelationship, entry); 
         });
 
         if ((skip + contentfulBatchSize) < entries.total) {

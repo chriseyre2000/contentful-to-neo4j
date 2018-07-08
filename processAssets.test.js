@@ -1,5 +1,5 @@
 import mockNeo4jServiceFactory from "./mocks/mockNeo4jService";
-import mockContentfulServiceFactory from "./mocks/mockContentfulService";
+import mockContentfulServiceFactory, { assetFactory } from "./mocks/mockContentfulService";
 import transformServiceFactory from "./transformService"
 
 const contentfulBatchSize = 10;
@@ -35,25 +35,8 @@ test('Check Process Empty Assets Calls Entries', (done) => {
     const assets = {
         total: 20,
         items: [
-            {
-                sys : {id: "first-asset-id", type: "Asset"},
-                fields: { 
-                    title: "first-asset-title",
-                    file: {
-                        url: "//first-file-url"
-                    }
-                }
-            },
-            {
-                sys : {id: "second-asset-id", type: "Asset"},
-                fields: { 
-                    title: "second-asset-title",
-                    file: {
-                        url: "//second-file-url"
-                    }
-                }
-            },
-
+            assetFactory("first-asset-id", "first-asset-title", "//first-file-url"),            
+            assetFactory("second-asset-id", "second-asset-title", "//second-file-url"),            
         ]
     };
   
