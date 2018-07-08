@@ -4,44 +4,47 @@ import {
     processRelationship,
 } from "./contentfulTransform";
 
-const transformServiceFactory = (contentful, neo4j) => {
+const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
 
     // This is the main entry point
-    const copyContentfulSpaceToNeo4j = (batchSize) => {
-        fetchAssets(batchSize, 0);
+    const copyContentfulSpaceToNeo4j = () => {
+        fetchAssets(0);
     }
 
-    const fetchAssets = (limit, skip) => {
-        contentful.getAssets(limit, skip)
-            .then(assets => processAssets(assets, skip, limit));
+    const fetchAssets = (skip) => {
+        contentful.getAssets(contentfulBatchSize, skip)
+            .then(assets => {
+                processAssets(assets, contentfulBatchSize, skip)
+            });
     };
 
-    const processAssets = (assets, skip, limit) => {
+    const processAssets = (assets, skip) => {
         console.log("Assets:", assets.items.length);
+        
         assets.items.forEach(asset => processAsset(neo4j, asset));
 
-        if ((skip + limit) < assets.total) {
-            fetchAssets(limit, skip + limit);
+        if ((skip + contentfulBatchSize) < assets.total) {
+            fetchAssets(contentfulBatchSize, skip + contentfulBatchSize);
         }
         else {
-            fetchEntries(limit, 0);
+            fetchEntries(0);
         }
     }
 
-    const fetchEntries = (limit, skip) => {
-        contentful.getEntries(limit, skip)
-            .then(entries => processEntries(entries, skip, limit));
+    const fetchEntries = (skip) => {
+        contentful.getEntries(contentfulBatchSize, skip)
+            .then(entries => processEntries(entries, skip));
     }
 
-    const processEntries = (entries, skip, limit) => {
+    const processEntries = (entries, skip) => {
         console.log("Entries:", entries.items.length);
 
         entries.items.forEach((entry) => {
             processEntry(neo4j, storeRelationship, entry);
         });
 
-        if ((skip + limit) < entries.total) {
-            fetchEntries(limit, skip + limit);
+        if ((skip + contentfulBatchSize) < entries.total) {
+            fetchEntries(skip + contentfulBatchSize);
         } else {
             processRelationships();
         }
@@ -68,7 +71,8 @@ const transformServiceFactory = (contentful, neo4j) => {
         processAssets,
         processEntries,
         processRelationships,
-        storeRelationship
+        storeRelationship,
+        fetchAssets
     }
 };
 

@@ -2,6 +2,8 @@ import mockNeo4jServiceFactory from "./mocks/mockNeo4jService";
 import mockContentfulServiceFactory from "./mocks/mockContentfulService";
 import transformServiceFactory from "./transformService"
 
+const contentfulBatchSize = 10;
+
 test('Check Process Empty Assets Calls Entries', (done) => {
   
   const contentfulService = mockContentfulServiceFactory();
@@ -16,9 +18,11 @@ test('Check Process Empty Assets Calls Entries', (done) => {
   neo4jService.finish.mockReturnValue( new Promise( () => {
     done();
   } ));
-  const transformService = transformServiceFactory(contentfulService, neo4jService);
 
-  transformService.processAssets(assets, 0, 10);
+
+  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+
+  transformService.processAssets(assets, 0);
 
   expect(contentfulService.getEntries.mock.calls.length).toEqual(1);
 } );
@@ -57,9 +61,9 @@ test('Check Process Empty Assets Calls Entries', (done) => {
     neo4jService.finish.mockReturnValue( new Promise( () => {
       done();
     } ));
-    const transformService = transformServiceFactory(contentfulService, neo4jService);
+    const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
   
-    transformService.processAssets(assets, 0, 10);
+    transformService.processAssets(assets, 0);
   
     expect(contentfulService.getAssets.mock.calls.length).toEqual(1);
   } );

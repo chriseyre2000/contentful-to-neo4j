@@ -5,8 +5,8 @@ import transformServiceFactory from "./transformService";
 
 neo4jService.emptyGraphDatabase();
 
-const transformService = transformServiceFactory(contentfulService, neo4jService);
+const transformService = transformServiceFactory(contentfulService, neo4jService, config.contentful.batchSize);
 
-transformService.copyContentfulSpaceToNeo4j(config.contentful.batchSize);
+transformService.copyContentfulSpaceToNeo4j();
 
 

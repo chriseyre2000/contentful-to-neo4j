@@ -187,7 +187,6 @@ describe("ProcessEntry Tests", () => {
         expect(dbCalls.length)
             .toEqual(1);
 
-
         expect(storeRelationships.mock.calls.length)
             .toEqual(1);
 
@@ -198,6 +197,38 @@ describe("ProcessEntry Tests", () => {
                 relation: "assetField"
             });    
     });
+
+
+    test("Process Entry with an unknown field", () => {
+        //Given
+        const neo4j = neo4jServiceMockFactory();
+        const storeRelationships = jest.fn();
+
+        const entry = entryFactory(
+            "content-type-with-unknown-field", 
+            "first-id", 
+            {
+                unknownField: { 
+                    foo: "bar",
+                }
+            }
+        );
+        
+        //When
+        processEntry(neo4j, storeRelationships, entry);
+
+        //Then
+        const dbCalls = neo4j.cypherCommand.mock.calls;
+
+        expect(dbCalls.length)
+            .toEqual(1);
+
+        expect(storeRelationships.mock.calls.length)
+            .toEqual(0);
+
+        //We should probably catch the log message
+    });
+
 
     test("Process Entry with an array of booleans", () => {
         //Given
