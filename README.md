@@ -39,8 +39,6 @@ Known issues:
 - Quotes in arrays of strings may break the import.
 - Error handling is still weak.
 
-The next neo4j change to make is to get it to work on a graphene database hosted in a heroku environment.
-
 * Working with a graphene database hosted in heroku:
 
 If you want to have you neo4j server running in a hosted environment then you can try and use the Graphene addon to Heroku:
