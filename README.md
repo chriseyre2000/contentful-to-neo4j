@@ -21,9 +21,9 @@ Set the following environment variables (windows version, use export or prefix o
 ```
 SET SPACE_ID=xxx
 SET CONTENTFUL_ACCESS_TOKEN=yyy
-SET NEO4J_PASSWORD=badpassword
-SET NEO4j_USER=neo4j // defaults to neo4j
-SET NEO4J_SERVER=bolt://localhost
+SET NEO4J_PASSWORD=badpassword // defaults to GRAPHENEDB_BOLT_PASSWORD
+SET NEO4j_USER=neo4j // defaults to GRAPHENEDB_BOLT_USER then neo4j
+SET NEO4J_SERVER=bolt://localhost    // defaults to GRAPHENEDB_BOLT_URL then  bolt://localhost
 SET CONTENTFUL_BATCH_SIZE=1000 // defaults to 500
 
 npm install
@@ -40,3 +40,23 @@ Known issues:
 - Error handling is still weak.
 
 The next neo4j change to make is to get it to work on a graphene database hosted in a heroku environment.
+
+* Working with a graphene database hosted in heroku:
+
+If you want to have you neo4j server running in a hosted environment then you can try and use the Graphene addon to Heroku:
+
+- Sign up to heroku (it's free if you are not using anything)
+- Enter a credit card (just to stop anyone from using too much free stuff)
+- Create a heroku app - it can be empty.
+- Add a Graphene database (I used the free tier to test this).
+- After a few mins it will be provisioned so now look at the settings tab of your app.
+- There are three keys here:
+
+```
+GRAPHENEDB_BOLT_PASSWORD - maps to my NEO4J_PASSWORD
+GRAPHENEDB_BOLT_URL - maps to my NEO4J_SERVER
+GRAPHENEDB_BOLT_USER - maps to my NEO4J_USER
+```
+
+I am going to make these fallbacks in case the existing environment variables are not present.
+This will allow the contentful syncing to be set up as a heroku task. You would need to populate the two contentful keys.

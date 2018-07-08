@@ -5,9 +5,9 @@ const config = {
       batchSize : process.env.CONTENTFUL_BATCH_SIZE || 500,
     },
     neo4j: {
-      uri : process.env.NEO4J_SERVER || 'bolt://localhost',
-      user: process.env.NEO4j_USER || 'neo4j',
-      password: process.env.NEO4J_PASSWORD,
+      uri : process.env.NEO4J_SERVER || process.env.GRAPHENEDB_BOLT_URL || 'bolt://localhost',
+      user: process.env.NEO4j_USER || process.env.GRAPHENEDB_BOLT_USER ||'neo4j',
+      password: process.env.NEO4J_PASSWORD || process.env.GRAPHENEDB_BOLT_PASSWORD,
     }
   };
 
