@@ -50,13 +50,16 @@ If you want to have you neo4j server running in a hosted environment then you ca
 - Create a heroku app - it can be empty.
 - Add a Graphene database (I used the free tier to test this).
 - After a few mins it will be provisioned so now look at the settings tab of your app.
-- There are three keys here:
+
+Use the heroku cli to add a remote to your local copy of this repo.
+Push the code to the repo. (git push heroku master)
+
+Add SET SPACE_ID and CONTENTFUL_ACCESS_TOKEN.
+
+Once this has restarted you can use the Heroku command:
 
 ```
-GRAPHENEDB_BOLT_PASSWORD - maps to my NEO4J_PASSWORD
-GRAPHENEDB_BOLT_URL - maps to my NEO4J_SERVER
-GRAPHENEDB_BOLT_USER - maps to my NEO4J_USER
+heroku run loader -a INSERT_SPACE_NAME
 ```
 
-I am going to make these fallbacks in case the existing environment variables are not present.
-This will allow the contentful syncing to be set up as a heroku task. You would need to populate the two contentful keys.
+This should populate your graphene database with the content from your space.
