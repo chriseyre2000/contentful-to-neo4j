@@ -12,10 +12,11 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const fetchAssets = (skip) => {
+        
+        const handleAssets = assets => processAssets(assets, contentfulBatchSize, skip);
+        
         contentful.getAssets(contentfulBatchSize, skip)
-            .then(assets => {
-                processAssets(assets, contentfulBatchSize, skip);
-            });
+            .then(handleAssets);
     };
 
     const processAssets = (assets, skip) => {
@@ -32,8 +33,12 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const fetchEntries = (skip) => {
+        console.log("Fetch Entries");
+        
+        const handleEntries = entries => processEntries(entries, skip);
+        
         contentful.getEntries(contentfulBatchSize, skip)
-            .then(entries => processEntries(entries, skip));
+            .then(handleEntries);
     }
 
     const processEntries = (entries, skip) => {
@@ -72,7 +77,8 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
         processEntries,
         processRelationships,
         storeRelationship,
-        fetchAssets
+        fetchAssets,
+        fetchEntries
     }
 };
 
