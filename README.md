@@ -6,7 +6,11 @@ This library will populate a neo4j database from a contentful space.
 The practical uses are visualization and a powerful query language.
 You can easily find orphan entities.
 
-Here is an artile that explains this project: https://devrantsblog.wordpress.com/2018/07/01/viewing-contentful-data-in-neo4j/
+Here is an article that explains this project: https://devrantsblog.wordpress.com/2018/07/01/viewing-contentful-data-in-neo4j/
+
+Article has been used (with permission) here:
+
+https://www.contentful.com/blog/2018/07/11/viewing-contentful-data-in-neo4j/
 
 This still may break on unexpected content (use of quotes in arrays of strings is a known weakness).
 I have yet to run it on a really large contentful space - which could could problems given that currently 
