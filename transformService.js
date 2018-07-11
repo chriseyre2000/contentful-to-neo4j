@@ -15,8 +15,13 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
         
         const handleAssets = assets => processAssets(assets, contentfulBatchSize, skip);
         
+        const handleFailure = reason => {
+            console.log(`Fetch assets failed with ${reason}`);
+            process.exit(1);
+        };
+
         contentful.getAssets(contentfulBatchSize, skip)
-            .then(handleAssets);
+            .then(handleAssets, handleFailure);
     };
 
     const processAssets = (assets, skip) => {
@@ -33,12 +38,15 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const fetchEntries = (skip) => {
-        console.log("Fetch Entries");
-        
         const handleEntries = entries => processEntries(entries, skip);
-        
+
+        const handleFailure = reason => {
+            console.log(`Fetch entries failed with ${reason}`);
+            process.exit(1);
+        };
+
         contentful.getEntries(contentfulBatchSize, skip)
-            .then(handleEntries);
+            .then(handleEntries, handleFailure);
     }
 
     const processEntries = (entries, skip) => {
