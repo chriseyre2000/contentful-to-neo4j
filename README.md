@@ -5,6 +5,7 @@ This library will populate a neo4j database from a contentful space.
 
 The practical uses are visualization and a powerful query language.
 You can easily find orphan entities.
+This allows writing reports against Contentful Data.
 
 Here is an article that explains this project: https://devrantsblog.wordpress.com/2018/07/01/viewing-contentful-data-in-neo4j/
 
