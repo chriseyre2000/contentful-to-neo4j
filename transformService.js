@@ -12,8 +12,8 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const fetchAssets = (skip) => {
-        
-        const handleAssets = assets => processAssets(assets, contentfulBatchSize, skip);
+        console.log(`fetch Assets ${skip}`);
+        const handleAssets = assets => processAssets(assets, skip);
         
         const handleFailure = reason => {
             console.log(`Fetch assets failed with ${reason}`);
@@ -25,19 +25,24 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     };
 
     const processAssets = (assets, skip) => {
-        console.log("Assets:", assets.items.length);
+        console.log(`Assets: ${assets.items.length} of ${assets.total} ${skip}`);
         
         assets.items.forEach(asset => processAsset(neo4j, asset));
 
+        console.log(`processAssets ${skip} ${contentfulBatchSize} ${assets.total}`);
+
         if ((skip + contentfulBatchSize) < assets.total) {
+
             fetchAssets(contentfulBatchSize, skip + contentfulBatchSize);
         }
         else {
-            fetchEntries(0);
+            fetchEntries();
         }
     }
 
-    const fetchEntries = (skip) => {
+    const fetchEntries = (skip = 0) => {
+        console.log(`fetch Entries ${skip}`);
+
         const handleEntries = entries => processEntries(entries, skip);
 
         const handleFailure = reason => {
@@ -50,11 +55,13 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const processEntries = (entries, skip) => {
-        console.log("Entries:", entries.items.length);
+        console.log(`Entries: ${entries.items.length} of ${entries.total}`);
 
         entries.items.forEach((entry) => {
             processEntry(neo4j, storeRelationship, entry); 
         });
+
+        console.log(`processEntries ${skip} ${contentfulBatchSize} ${entries.total}`);
 
         if ((skip + contentfulBatchSize) < entries.total) {
             fetchEntries(skip + contentfulBatchSize);
