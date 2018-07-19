@@ -1,5 +1,7 @@
+import Bottleneck from "bottleneck"
 import { createClient } from "contentful";
 import config from './config';
+
 
 const contentfulClient = createClient({
   space: config.contentful.spaceId,
@@ -7,20 +9,25 @@ const contentfulClient = createClient({
   resolveLinks: false,
 });
 
+const limiter = new Bottleneck({
+    minTime: 2000,
+    maxConcurrent: 1
+  });
+
 const getAssets = (limit, skip) => {
-    return contentfulClient.getAssets({
+    return limiter.schedule( () =>  contentfulClient.getAssets({
         skip: skip,
         limit: limit,
         order: 'sys.createdAt'
-    });
+    }));
 }
 
 const getEntries = (limit, skip) => {
-    return contentfulClient.getEntries({
+    return limiter.schedule( () => contentfulClient.getEntries({
         skip: skip,
         limit: limit,
         order: 'sys.createdAt'
-      })
+      }));
 }
 
 const contentfulService = {

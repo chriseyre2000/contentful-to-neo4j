@@ -32,8 +32,7 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
         console.log(`processAssets ${skip} ${contentfulBatchSize} ${assets.total}`);
 
         if ((skip + contentfulBatchSize) < assets.total) {
-
-            fetchAssets(contentfulBatchSize, skip + contentfulBatchSize);
+            fetchAssets(skip + contentfulBatchSize);
         }
         else {
             fetchEntries();

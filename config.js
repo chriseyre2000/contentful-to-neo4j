@@ -2,7 +2,7 @@ const config = {
     contentful: {
       spaceId : process.env.SPACE_ID,
       accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-      batchSize : process.env.CONTENTFUL_BATCH_SIZE || 500,
+      batchSize :  parseInt(process.env.CONTENTFUL_BATCH_SIZE) || 500,
     },
     neo4j: {
       uri : process.env.NEO4J_SERVER || process.env.GRAPHENEDB_BOLT_URL || 'bolt://localhost',

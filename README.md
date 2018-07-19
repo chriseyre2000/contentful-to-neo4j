@@ -42,6 +42,7 @@ Known issues:
 
 - Embedded images are not referenced from markdown fields.
 - Quotes in arrays of strings may break the import.
+- There is a rate limit issue with larger datasets.
 
 Working with a graphene database hosted in heroku
 =================================================
