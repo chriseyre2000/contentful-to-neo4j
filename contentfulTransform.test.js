@@ -5,8 +5,8 @@ import {
 } from "./contentfulTransform";
 
 import neo4jServiceMockFactory from "./mocks/mockNeo4jService";
-
 import { entryFactory } from "./mocks/mockContentfulService";
+import mockLogFactory from "./mocks/mockLogService";
 
 describe("Process Asset Test", () => {
     test("process Asset", () => {
@@ -40,6 +40,7 @@ describe("ProcessEntry Tests", () => {
     test("ProcessEntry with no fields", () => {
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "first-content-type", 
@@ -47,7 +48,7 @@ describe("ProcessEntry Tests", () => {
             {}
         );
 
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
         expect(neo4j.cypherCommand.mock.calls.length)
             .toEqual(1);
         expect(neo4j.cypherCommand.mock.calls[0][0])
@@ -59,6 +60,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-boolean", 
@@ -69,7 +71,7 @@ describe("ProcessEntry Tests", () => {
         );
 
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -89,6 +91,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-number", 
@@ -99,7 +102,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -119,6 +122,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-string", 
@@ -129,7 +133,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -151,6 +155,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-asset", 
@@ -166,7 +171,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -190,6 +195,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-unknown-field", 
@@ -202,7 +208,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -221,6 +227,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-array-of-booleans", 
@@ -234,7 +241,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -254,6 +261,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-array-of-numbers", 
@@ -267,7 +275,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -287,6 +295,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-string-array", 
@@ -300,7 +309,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;
@@ -320,6 +329,7 @@ describe("ProcessEntry Tests", () => {
         //Given
         const neo4j = neo4jServiceMockFactory();
         const storeRelationships = jest.fn();
+        const log = mockLogFactory();
 
         const entry = entryFactory(
             "content-type-with-string", 
@@ -343,7 +353,7 @@ describe("ProcessEntry Tests", () => {
         );
         
         //When
-        processEntry(neo4j, storeRelationships, entry);
+        processEntry(neo4j, storeRelationships, entry, log);
 
         //Then
         const dbCalls = neo4j.cypherCommand.mock.calls;

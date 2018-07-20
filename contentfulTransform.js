@@ -10,7 +10,7 @@ function processAsset(neo4j, asset) {
     neo4j.cypherCommand(`CREATE (a:asset {cmsid: '${asset.sys.id}', cmstype: '${asset.sys.type}', title: {titleParam}, url: '${asset.fields.file.url}'} ) RETURN a`, { titleParam: asset.fields.title });
 }
 
-function processEntry(neo4j, storeRelationship, entry) {
+function processEntry(neo4j, storeRelationship, entry, log) {
     const cmd = `CREATE (a:${entry.sys.contentType.sys.id} {cmsid: '${entry.sys.id}', contenttype: '${entry.sys.contentType.sys.id}', cmstype: '${entry.sys.type}'} ) RETURN a`;
     neo4j.cypherCommand(cmd);
     // Work on fields and relationships
@@ -44,7 +44,7 @@ function processEntry(neo4j, storeRelationship, entry) {
             storeRelationship({ id: entry.sys.id, otherId: fieldValue.sys.id, relation: fieldName });
         }
         else {
-            console.log('UNKNOWN FIELD: ' + fieldName + ' ' + typeof (fieldValue));
+            log('UNKNOWN FIELD: ' + fieldName + ' ' + typeof (fieldValue));
         }
     });
 }

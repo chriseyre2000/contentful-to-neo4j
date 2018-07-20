@@ -1,6 +1,7 @@
 import mockNeo4jServiceFactory from "./mocks/mockNeo4jService";
 import mockContentfulServiceFactory from "./mocks/mockContentfulService";
 import transformServiceFactory from "./transformService";
+import mockLogService from "./mocks/mockLogService";
 
 const contentfulBatchSize = 10;
 
@@ -8,7 +9,8 @@ test('Check Process Empty Entries Calls Relationships', (done) => {
   
     const contentfulService = mockContentfulServiceFactory();
     const neo4jService = mockNeo4jServiceFactory();
-    
+    const log = mockLogService();
+
     const entries = {
         total: 0,
         items: []
@@ -20,7 +22,7 @@ test('Check Process Empty Entries Calls Relationships', (done) => {
         done();
       } ));
 
-    const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+    const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
   
     transformService.processEntries(entries, 0);
   
@@ -28,10 +30,11 @@ test('Check Process Empty Entries Calls Relationships', (done) => {
   } );
   
 
-test('Check Process Entries Calls Fetch More', () => {
+test('Check Process Entries Calls Fetch More', (done) => {
 
     const contentfulService = mockContentfulServiceFactory();
     const neo4jService = mockNeo4jServiceFactory();
+    const log = mockLogService();
 
     const entries = {
         total: 11,
@@ -44,7 +47,7 @@ test('Check Process Entries Calls Fetch More', () => {
         done();
       } ));
 
-    const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+    const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
   
     transformService.processEntries(entries, 0);
   

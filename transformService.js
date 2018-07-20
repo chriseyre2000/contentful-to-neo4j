@@ -4,7 +4,7 @@ import {
     processRelationship,
 } from "./contentfulTransform";
 
-const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
+const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log) => {
 
     // This is the main entry point
     const copyContentfulSpaceToNeo4j = () => {
@@ -12,11 +12,11 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const fetchAssets = (skip) => {
-        console.log(`fetch Assets ${skip}`);
+        log(`fetch Assets ${skip}`);
         const handleAssets = assets => processAssets(assets, skip);
         
         const handleFailure = reason => {
-            console.log(`Fetch assets failed with ${reason}`);
+            log(`Fetch assets failed with ${reason}`);
             process.exit(1);
         };
 
@@ -25,11 +25,11 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     };
 
     const processAssets = (assets, skip) => {
-        console.log(`Assets: ${assets.items.length} of ${assets.total} ${skip}`);
+        log(`Assets: ${assets.items.length} of ${assets.total} ${skip}`);
         
         assets.items.forEach(asset => processAsset(neo4j, asset));
 
-        console.log(`processAssets ${skip} ${contentfulBatchSize} ${assets.total}`);
+        log(`processAssets ${skip} ${contentfulBatchSize} ${assets.total}`);
 
         if ((skip + contentfulBatchSize) < assets.total) {
             fetchAssets(skip + contentfulBatchSize);
@@ -40,12 +40,12 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const fetchEntries = (skip = 0) => {
-        console.log(`fetch Entries ${skip}`);
+        log(`fetch Entries ${skip}`);
 
         const handleEntries = entries => processEntries(entries, skip);
 
         const handleFailure = reason => {
-            console.log(`Fetch entries failed with ${reason}`);
+            log(`Fetch entries failed with ${reason}`);
             process.exit(1);
         };
 
@@ -54,13 +54,13 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const processEntries = (entries, skip) => {
-        console.log(`Entries: ${entries.items.length} of ${entries.total}`);
+        log(`Entries: ${entries.items.length} of ${entries.total}`);
 
         entries.items.forEach((entry) => {
-            processEntry(neo4j, storeRelationship, entry); 
+            processEntry(neo4j, storeRelationship, entry, log); 
         });
 
-        console.log(`processEntries ${skip} ${contentfulBatchSize} ${entries.total}`);
+        log(`processEntries ${skip} ${contentfulBatchSize} ${entries.total}`);
 
         if ((skip + contentfulBatchSize) < entries.total) {
             fetchEntries(skip + contentfulBatchSize);
@@ -76,7 +76,7 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize) => {
     }
 
     const processRelationships = () => {
-        console.log("We found " + relationships.length + " relationships")
+        log("We found " + relationships.length + " relationships")
 
         relationships.forEach(relationship => {
             processRelationship(neo4j, relationship);

@@ -1,6 +1,7 @@
 import mockNeo4jServiceFactory from "./mocks/mockNeo4jService";
 import mockContentfulServiceFactory, { entryFactory, assetFactory } from "./mocks/mockContentfulService";
 import transformServiceFactory from "./transformService";
+import mockLogFactory from "./mocks/mockLogService";
 
 const contentfulBatchSize = 10;
 
@@ -9,10 +10,12 @@ test("If contentful is empty then nothing is sent to the db", (done) => {
   const contentfulService = mockContentfulServiceFactory();
   const neo4jService = mockNeo4jServiceFactory();
 
+  const log = mockLogFactory();
+
   contentfulService.getAssets.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
   contentfulService.getEntries.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
   
-  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
 
   transformService.copyContentfulSpaceToNeo4j();
 
@@ -31,6 +34,7 @@ test("Can call multiple batches of assets and entries", (done) => {
 
   const contentfulService = mockContentfulServiceFactory();
   const neo4jService = mockNeo4jServiceFactory();
+  const log = mockLogFactory();
 
   const assetResult = Promise.resolve({total: 15, items: []});
   const entryResult = Promise.resolve({total: 21, items: []});
@@ -38,7 +42,7 @@ test("Can call multiple batches of assets and entries", (done) => {
   contentfulService.getAssets.mockReturnValue( assetResult);
   contentfulService.getEntries.mockReturnValue( entryResult );
   
-  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
 
   transformService.copyContentfulSpaceToNeo4j();
 
@@ -63,11 +67,12 @@ test("If contentful is empty then nothing is sent to the db", (done) => {
 
   const contentfulService = mockContentfulServiceFactory();
   const neo4jService = mockNeo4jServiceFactory();
+  const log = mockLogFactory();
 
   contentfulService.getAssets.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
   contentfulService.getEntries.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
   
-  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
 
   transformService.copyContentfulSpaceToNeo4j();
 
@@ -87,11 +92,12 @@ test("processRelationships ", () => {
   //Given
   const contentfulService = mockContentfulServiceFactory();
   const neo4jService = mockNeo4jServiceFactory();
+  const log = mockLogFactory();
 
   contentfulService.getAssets.mockReturnValue(new Promise(() => contentfulService.emptyResult));
   contentfulService.getEntries.mockReturnValue(new Promise(() => contentfulService.emptyResult));
 
-  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
 
   const relationshipSimple = {
     id: "first-id",
@@ -121,11 +127,12 @@ test("process entries", () => {
   //Given
   const contentfulService = mockContentfulServiceFactory();
   const neo4jService = mockNeo4jServiceFactory();
+  const log = mockLogFactory();
 
   contentfulService.getAssets.mockReturnValue(new Promise(() => contentfulService.emptyResult));
   contentfulService.getEntries.mockReturnValue(new Promise(() => entries));
 
-  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize);
+  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
 
   const entries = {
     total: 1,
