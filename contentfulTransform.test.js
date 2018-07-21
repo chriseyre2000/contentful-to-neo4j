@@ -251,7 +251,10 @@ describe("ProcessEntry Tests", () => {
 
         // We only care about the second one    
         expect(dbCalls[1][0])
-            .toEqual("MATCH (a {cmsid: 'first-id'}) SET a.booleanArrayField = [\"false\",\"true\"] RETURN a");
+            .toEqual("MATCH (a {cmsid: 'first-id'}) SET a.booleanArrayField = [{0},{1}] RETURN a");
+
+        expect(dbCalls[1][1])
+            .toEqual({0: false, 1: true});
 
         expect(storeRelationships.mock.calls.length)
             .toEqual(0);
@@ -285,7 +288,9 @@ describe("ProcessEntry Tests", () => {
 
         // We only care about the second one    
         expect(dbCalls[1][0])
-            .toEqual("MATCH (a {cmsid: 'first-id'}) SET a.numberArrayField = [\"42\",\"101\"] RETURN a");
+            .toEqual("MATCH (a {cmsid: 'first-id'}) SET a.numberArrayField = [{0},{1}] RETURN a");
+        expect(dbCalls[1][1])
+            .toEqual({0: 42, 1: 101});
 
         expect(storeRelationships.mock.calls.length)
             .toEqual(0);
@@ -319,7 +324,9 @@ describe("ProcessEntry Tests", () => {
 
         // We only care about the second one    
         expect(dbCalls[1][0])
-            .toEqual("MATCH (a {cmsid: 'first-id'}) SET a.stringArrayField = [\"This is a complex value\",\"Another\"] RETURN a");
+            .toEqual("MATCH (a {cmsid: 'first-id'}) SET a.stringArrayField = [{0},{1}] RETURN a");
+        expect(dbCalls[1][1])
+            .toEqual({0: "This is a complex value", 1: "Another"});
 
         expect(storeRelationships.mock.calls.length)
             .toEqual(0);

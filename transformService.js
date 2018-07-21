@@ -4,8 +4,8 @@ import {
     processRelationship,
 } from "./contentfulTransform";
 
-const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log) => {
-
+const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, systemService) => {
+    
     // This is the main entry point
     const copyContentfulSpaceToNeo4j = () => {
         fetchAssets(0);
@@ -16,8 +16,8 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log) =>
         const handleAssets = assets => processAssets(assets, skip);
         
         const handleFailure = reason => {
-            log(`Fetch assets failed with ${reason}`);
-            process.exit(1);
+            log(`Fetch assets failed with ${reason} at skip ${skip}`);
+            systemService.systemExit(1);
         };
 
         contentful.getAssets(contentfulBatchSize, skip)
@@ -45,8 +45,8 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log) =>
         const handleEntries = entries => processEntries(entries, skip);
 
         const handleFailure = reason => {
-            log(`Fetch entries failed with ${reason}`);
-            process.exit(1);
+            log(`Fetch entries failed with ${reason} at skip ${skip}`);
+            systemService.systemExit(1);
         };
 
         contentful.getEntries(contentfulBatchSize, skip)

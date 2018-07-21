@@ -3,6 +3,8 @@ import mockContentfulServiceFactory, { assetFactory } from "./mocks/mockContentf
 import transformServiceFactory from "./transformService"
 import mockLogService from "./mocks/mockLogService";
 
+import mockSystemServiceFactory from "./mocks/mockSystemService";
+
 const contentfulBatchSize = 10;
 
 test('Check Process Empty Assets Calls Entries', (done) => {
@@ -10,6 +12,7 @@ test('Check Process Empty Assets Calls Entries', (done) => {
   const contentfulService = mockContentfulServiceFactory();
   const neo4jService = mockNeo4jServiceFactory();
   const log = mockLogService();
+  const systemService = mockSystemServiceFactory();
 
   const assets = {
     total: 0,
@@ -22,7 +25,7 @@ test('Check Process Empty Assets Calls Entries', (done) => {
   } ));
 
 
-  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
+  const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log, systemService);
 
   transformService.processAssets(assets, 0);
 
@@ -34,6 +37,7 @@ test('Check Process Empty Assets Calls Entries', (done) => {
     const contentfulService = mockContentfulServiceFactory();
     const neo4jService = mockNeo4jServiceFactory();
     const log = mockLogService();
+    const systemService = mockSystemServiceFactory();
     
     const assets = {
         total: 20,
@@ -47,7 +51,7 @@ test('Check Process Empty Assets Calls Entries', (done) => {
     neo4jService.finish.mockReturnValue( new Promise( () => {
       done();
     } ));
-    const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log);
+    const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log, systemService);
   
     transformService.processAssets(assets, 0);
   

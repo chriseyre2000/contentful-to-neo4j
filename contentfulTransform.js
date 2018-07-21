@@ -27,17 +27,19 @@ function processEntry(neo4j, storeRelationship, entry, log) {
         }
         else if (isArray(fieldValue)) {
             let collection = [];
+            let params = {};
             fieldValue.forEach((v, i) => {
                 if (v.sys && v.sys.type) {
                     storeRelationship({ id: entry.sys.id, otherId: v.sys.id, relation: fieldName, order: i });
                 }
                 else {
-                    collection.push('"' + v.toString() + '"');
+                    params[`${i}`] = v;
+                    collection.push(`{${i}}`);
                 }
             });
             if (collection.length > 0) {
                 let cmd = `MATCH (a {cmsid: '${entry.sys.id}'}) SET a.${fieldName} = [${collection.join(",")}] RETURN a`;
-                neo4j.cypherCommand(cmd);
+                neo4j.cypherCommand(cmd, params);
             }
         }
         else if (fieldValue.sys && fieldValue.sys.type) {
