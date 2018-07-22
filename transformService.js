@@ -6,10 +6,14 @@ import {
 
 const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, systemService) => {
     
+    var targetBatchSize = contentfulBatchSize;
+
     // This is the main entry point
     const copyContentfulSpaceToNeo4j = () => {
         fetchAssets(0);
     }
+
+    const assetBatchSize = 1000;
 
     const fetchAssets = (skip) => {
         log(`fetch Assets ${skip}`);
@@ -20,7 +24,7 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, sy
             systemService.systemExit(1);
         };
 
-        contentful.getAssets(contentfulBatchSize, skip)
+        contentful.getAssets(assetBatchSize, skip)
             .then(handleAssets, handleFailure);
     };
 
@@ -29,10 +33,10 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, sy
         
         assets.items.forEach(asset => processAsset(neo4j, asset));
 
-        log(`processAssets ${skip} ${contentfulBatchSize} ${assets.total}`);
+        log(`processAssets ${skip} ${assetBatchSize} ${assets.total}`);
 
-        if ((skip + contentfulBatchSize) < assets.total) {
-            fetchAssets(skip + contentfulBatchSize);
+        if ((skip + assetBatchSize) < assets.total) {
+            fetchAssets(skip + assetBatchSize);
         }
         else {
             fetchEntries();
@@ -40,30 +44,29 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, sy
     }
 
     const fetchEntries = (skip = 0) => {
-        log(`fetch Entries ${skip}`);
+        log(`fetch Entries ${skip} ${targetBatchSize}`);
 
         const handleEntries = entries => processEntries(entries, skip);
 
-        const handleFailure = reason => {
-            log(`Fetch entries failed with ${reason} at skip ${skip}`);
-            systemService.systemExit(1);
-        };
-
-        contentful.getEntries(contentfulBatchSize, skip)
-            .then(handleEntries, handleFailure);
+        contentful.getEntries(targetBatchSize, skip)
+            .then(handleEntries)
+            .catch(error=>{
+                log(`Fetch entries failed with ${error} at skip ${skip} ${targetBatchSize}`);
+                systemService.systemExit(1);
+            })
     }
 
     const processEntries = (entries, skip) => {
-        log(`Entries: ${entries.items.length} of ${entries.total}`);
+        log(`Entries: ${entries.items.length} of ${entries.total} ${skip}`);
 
         entries.items.forEach((entry) => {
             processEntry(neo4j, storeRelationship, entry, log); 
         });
 
-        log(`processEntries ${skip} ${contentfulBatchSize} ${entries.total}`);
+        log(`processEntries ${skip} ${targetBatchSize} ${entries.total}`);
 
-        if ((skip + contentfulBatchSize) < entries.total) {
-            fetchEntries(skip + contentfulBatchSize);
+        if ((skip + targetBatchSize) < entries.total) {
+            fetchEntries(skip + targetBatchSize);
         } else {
             processRelationships();
         }

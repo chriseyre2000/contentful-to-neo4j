@@ -47,14 +47,19 @@ test('Check Process Empty Assets Calls Entries', (done) => {
         ]
     };
   
-    contentfulService.getAssets.mockReturnValue( new Promise(() => contentfulService.emptyResult) );
-    neo4jService.finish.mockReturnValue( new Promise( () => {
-      done();
-    } ));
+    contentfulService.getAssets.mockReturnValue( Promise.resolve(contentfulService.emptyResult) );
+    contentfulService.getEntries.mockReturnValue( Promise.resolve(contentfulService.emptyResult) );
+
+
     const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log, systemService);
   
-    transformService.processAssets(assets, 0);
+    transformService.copyContentfulSpaceToNeo4j();
   
-    expect(contentfulService.getAssets.mock.calls.length).toEqual(1);
+    setTimeout( () => {
+      expect(contentfulService.getAssets.mock.calls.length).toEqual(1);
+      expect(contentfulService.getEntries.mock.calls.length).toEqual(1);
+
+      done();
+    }, 1);
   } );
   

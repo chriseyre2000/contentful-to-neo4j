@@ -41,8 +41,7 @@ The contentful access token is the read-only publish token (it currently does no
 Known issues:
 
 - Embedded images are not referenced from markdown fields.
-- Quotes in arrays of strings may break the import.
-- There is a rate limit issue with larger datasets.
+- There is a rate limit issue with larger datasets - can't recover from a 400 failure.
 
 Working with a graphene database hosted in heroku
 =================================================
