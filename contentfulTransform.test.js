@@ -52,7 +52,7 @@ describe("ProcessEntry Tests", () => {
         expect(neo4j.cypherCommand.mock.calls.length)
             .toEqual(1);
         expect(neo4j.cypherCommand.mock.calls[0][0])
-            .toEqual("CREATE (a:first-content-type {cmsid: 'first-id', contenttype: 'first-content-type', cmstype: 'Entry'} ) RETURN a");
+            .toEqual("CREATE (a:firstcontenttype {cmsid: 'first-id', contenttype: 'first-content-type', cmstype: 'Entry'} ) RETURN a");
 
     });
 

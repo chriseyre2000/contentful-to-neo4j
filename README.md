@@ -30,6 +30,7 @@ SET NEO4J_PASSWORD=badpassword // defaults to GRAPHENEDB_BOLT_PASSWORD
 SET NEO4j_USER=neo4j // defaults to GRAPHENEDB_BOLT_USER then neo4j
 SET NEO4J_SERVER=bolt://localhost    // defaults to GRAPHENEDB_BOLT_URL then  bolt://localhost
 SET CONTENTFUL_BATCH_SIZE=1000 // defaults to 500
+SET CONTENTFUL_DELAY=1000 // defaults to 2000 Time (ms) between calls to avoid rate limit.
 
 npm install
 
@@ -41,7 +42,7 @@ The contentful access token is the read-only publish token (it currently does no
 Known issues:
 
 - Embedded images are not referenced from markdown fields.
-- There is an outstanding issue when data to too big to return in one batch - currently can't recover from a 400 failure.
+- Commits to neo4j are currently in a single transaction so can be slow for large contentful spaces.
 
 Working with a graphene database hosted in heroku
 =================================================

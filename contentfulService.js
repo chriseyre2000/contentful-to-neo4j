@@ -10,7 +10,7 @@ const contentfulClient = createClient({
 });
 
 const limiter = new Bottleneck({
-    minTime: 2000,
+    minTime: config.contentful.minTimeBetweenTransactions,
     maxConcurrent: 1
   });
 
@@ -26,6 +26,7 @@ const getEntries = (limit, skip) => {
     return limiter.schedule( () => contentfulClient.getEntries({
         skip: skip,
         limit: limit,
+        include: 0,
         order: 'sys.createdAt'
       }));
 }
