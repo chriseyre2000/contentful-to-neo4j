@@ -89,13 +89,6 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, sy
 
     return {
         copyContentfulSpaceToNeo4j,
-        // The following are exposed for testing
-        processAssets,
-        processEntries,
-        processRelationships,
-        storeRelationship,
-        fetchAssets,
-        fetchEntries
     }
 };
 

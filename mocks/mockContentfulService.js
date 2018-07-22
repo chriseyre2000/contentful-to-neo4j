@@ -10,6 +10,23 @@ const mockContentfulServiceFactory = () => {
     }
 }
 
+const assetFieldFactory = (assetId) => {
+    return { 
+        sys: {
+            id : assetId,
+            type: "Asset",
+        }
+      }
+}
+const entryFieldFactory = (entryId) => {
+    return { 
+        sys: {
+            id : entryId,
+            type: "Entry",
+        }
+      }
+}
+
 const entryFactory = (contentTypeId, id, fields) => {
     return {
         sys: {
@@ -40,4 +57,4 @@ const assetFactory = (id, title, url) => {
 
 export default mockContentfulServiceFactory;
 
-export { entryFactory, assetFactory };
+export { entryFactory, assetFactory, assetFieldFactory, entryFieldFactory };

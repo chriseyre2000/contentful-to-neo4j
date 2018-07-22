@@ -53,7 +53,7 @@ function processEntry(neo4j, storeRelationship, entry, log) {
 }
 
 function processRelationship(neo4j, relationship) {
-    if (relationship.order) {
+    if (relationship.hasOwnProperty("order")) {
         let cmd1 = `MATCH (a {cmsid: '${relationship.id}'}), (b {cmsid: '${relationship.otherId}'} ) CREATE (a) -[r:${relationship.relation} {order: ${relationship.order}}]-> (b)`;
         neo4j.cypherCommand(cmd1);
     }

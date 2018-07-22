@@ -5,7 +5,7 @@ import {
 } from "./contentfulTransform";
 
 import neo4jServiceMockFactory from "./mocks/mockNeo4jService";
-import { entryFactory } from "./mocks/mockContentfulService";
+import { entryFactory, assetFieldFactory, entryFieldFactory } from "./mocks/mockContentfulService";
 import mockLogFactory from "./mocks/mockLogService";
 
 describe("Process Asset Test", () => {
@@ -161,12 +161,7 @@ describe("ProcessEntry Tests", () => {
             "content-type-with-asset", 
             "first-id", 
             {
-                assetField: { 
-                    sys: {
-                        id : "other-id",
-                        type: "Asset"
-                    }
-                }
+                assetField: assetFieldFactory("other-id"),   
             }
         );
         
@@ -343,18 +338,8 @@ describe("ProcessEntry Tests", () => {
             "first-id", 
             {
                 complexArrayField: [
-                    { 
-                        sys: {
-                            id : "other-asset-id",
-                            type: "Asset"
-                        }
-                    }, 
-                    { 
-                        sys: {
-                            id : "other-entry-id",
-                            type: "Entry"
-                        }
-                    }, 
+                    assetFieldFactory("other-asset-id"),
+                    entryFieldFactory("other-entry-id") 
                 ]
             }
         );
