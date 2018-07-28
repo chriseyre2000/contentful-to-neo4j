@@ -29,7 +29,7 @@ SET CONTENTFUL_ACCESS_TOKEN=yyy
 SET NEO4J_PASSWORD=badpassword // defaults to GRAPHENEDB_BOLT_PASSWORD
 SET NEO4j_USER=neo4j // defaults to GRAPHENEDB_BOLT_USER then neo4j
 SET NEO4J_SERVER=bolt://localhost    // defaults to GRAPHENEDB_BOLT_URL then  bolt://localhost
-SET CONTENTFUL_BATCH_SIZE=1000 // defaults to 500
+SET CONTENTFUL_BATCH_SIZE=500 // defaults to 1000
 SET CONTENTFUL_DELAY=1000 // defaults to 2000 Time (ms) between calls to avoid rate limit.
 
 npm install
