@@ -7,13 +7,51 @@ The practical uses are visualization and a powerful query language.
 You can easily find orphan entities.
 This allows writing reports against Contentful Data.
 
+Why do I need this?
+===================
+
+If you are operating an application or website that uses Contentful it can be difficult to check the correctness of your data.
+Directly calling Contentful via the api is difficult since you will be caught out by the rate limits (and these queries could
+rate limit your production site).
+
+This utility uses the minimum needed calls to extract the full dataset from a Contentful space so that you can query a neo4j 
+database instead.
+
+The contentful api allows for one way links but does not have the full power of Neo4j. Neo4j allows queries between things 
+ignoring the direction of the link.
+
+Real would usages have included:
+
+- Check content has been entered and published  
+- Locate duplicates
+- Find orphan entries or images
+- Allow queries across content types (the Contentful content api is one content type at a time)
+- Count entries with a certain attribute (colour)
+- Determine that a content type is unused
+- Determine that a field is unused.
+- Validate complex business rules (this field must have three of this entry type attached)
+
+These examples are based upon the sample contentful space loaded into a local neo4j graph database.
+
+Check that we have published the expected lessons:
+
+MATCH (a:lesson) RETURN a
+
+Return a count by slug
+
+MATCH (a:lesson) RETURN a.slug, count(*)
+
+Find orphan records
+
+MATCH (a) WHERE not (a)-[]-() RETURN a
+
 Here is an article that explains this project: https://devrantsblog.wordpress.com/2018/07/01/viewing-contentful-data-in-neo4j/
 
 Article has been used (with permission) here:
 
 https://www.contentful.com/blog/2018/07/11/viewing-contentful-data-in-neo4j/
 
-This still may break on unexpected content (use of quotes in arrays of strings is a known weakness).
+This still may break on unexpected content.
 I have yet to run it on a really large contentful space - which could could problems given that currently 
 everything is committed in a single neo4j transaction.
 
