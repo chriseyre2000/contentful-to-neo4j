@@ -12,7 +12,7 @@ function processAsset(neo4j, asset) {
 
 function processEntry(neo4j, storeRelationship, entry, log) {
     //Neo4j will not allow a hyphen in a label name
-    const cmd = `CREATE (a:${entry.sys.contentType.sys.id.replace(/-/g,"")} {cmsid: '${entry.sys.id}', contenttype: '${entry.sys.contentType.sys.id}', cmstype: '${entry.sys.type}'} ) RETURN a`;
+    const cmd = `CREATE (a:type_${entry.sys.contentType.sys.id.replace(/-/g,"")} {cmsid: '${entry.sys.id}', contenttype: '${entry.sys.contentType.sys.id}', cmstype: '${entry.sys.type}'} ) RETURN a`;
     neo4j.cypherCommand(cmd);
     // Work on fields and relationships
     const fields = entry.fields;

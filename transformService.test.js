@@ -158,7 +158,7 @@ test("processRelationships", (done) => {
 
     expect(neo4jService.cypherCommand.mock.calls[0][0]).toEqual("CREATE (a:asset {cmsid: 'asset-id-1', cmstype: 'Asset', title: {titleParam}, url: '//asset.url.1'} ) RETURN a");
     expect(neo4jService.cypherCommand.mock.calls[1][0]).toEqual("CREATE (a:asset {cmsid: 'asset-id-2', cmstype: 'Asset', title: {titleParam}, url: '//asset.url.2'} ) RETURN a");
-    expect(neo4jService.cypherCommand.mock.calls[2][0]).toEqual("CREATE (a:contenttype1 {cmsid: 'content-type-id-1', contenttype: 'content-type-1', cmstype: 'Entry'} ) RETURN a");
+    expect(neo4jService.cypherCommand.mock.calls[2][0]).toEqual("CREATE (a:type_contenttype1 {cmsid: 'content-type-id-1', contenttype: 'content-type-1', cmstype: 'Entry'} ) RETURN a");
     expect(neo4jService.cypherCommand.mock.calls[3][0]).toEqual("MATCH (a {cmsid: 'content-type-id-1'}), (b {cmsid: 'asset-id-1'} ) CREATE (a) -[r:assetField]-> (b)");
      expect(neo4jService.cypherCommand.mock.calls[4][0]).toEqual("MATCH (a {cmsid: 'content-type-id-1'}), (b {cmsid: 'asset-id-1'} ) CREATE (a) -[r:arrayField {order: 0}]-> (b)");
     expect(neo4jService.cypherCommand.mock.calls[5][0]).toEqual("MATCH (a {cmsid: 'content-type-id-1'}), (b {cmsid: 'asset-id-2'} ) CREATE (a) -[r:arrayField {order: 1}]-> (b)");
