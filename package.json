@@ -4,7 +4,7 @@
   "description": "This maps a contentful space to a neo4j database.",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "npx babel src -d lib",
     "test": "jest",
     "load": "node lib/app"
   },
