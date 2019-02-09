@@ -1,1 +1,1 @@
-loader: yarn load
+loader: yarn build && yarn load

@@ -4,8 +4,9 @@
   "description": "This maps a contentful space to a neo4j database.",
   "main": "index.js",
   "scripts": {
+    "build": "babel src -d lib",
     "test": "jest",
-    "load": "node index"
+    "load": "node lib/app"
   },
   "jest": {
     "collectCoverage": true
@@ -17,6 +18,7 @@
     "url": "https://github.com/chriseyre2000/contentful-to-neo4j"
   },
   "dependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "@babel/register": "^7.0.0",

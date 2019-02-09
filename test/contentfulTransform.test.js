@@ -2,11 +2,11 @@ import {
     processAsset,
     processEntry,
     processRelationship
-} from "./contentfulTransform";
+} from "../src/contentfulTransform";
 
-import neo4jServiceMockFactory from "./mocks/mockNeo4jService";
-import { entryFactory, assetFieldFactory, entryFieldFactory } from "./mocks/mockContentfulService";
-import mockLogFactory from "./mocks/mockLogService";
+import neo4jServiceMockFactory from "../mocks/mockNeo4jService";
+import { entryFactory, assetFieldFactory, entryFieldFactory } from "../mocks/mockContentfulService";
+import mockLogFactory from "../mocks/mockLogService";
 
 describe("Process Asset Test", () => {
     test("process Asset", () => {

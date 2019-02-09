@@ -1,8 +1,8 @@
-import mockNeo4jServiceFactory from "./mocks/mockNeo4jService";
-import mockContentfulServiceFactory, { entryFactory, assetFactory, assetFieldFactory} from "./mocks/mockContentfulService";
-import transformServiceFactory from "./transformService";
-import mockLogFactory from "./mocks/mockLogService";
-import mockSystemServiceFactory from "./mocks/mockSystemService";
+import mockNeo4jServiceFactory from "../mocks/mockNeo4jService";
+import mockContentfulServiceFactory, { entryFactory, assetFactory, assetFieldFactory} from "../mocks/mockContentfulService";
+import transformServiceFactory from "../src/transformService";
+import mockLogFactory from "../mocks/mockLogService";
+import mockSystemServiceFactory from "../mocks/mockSystemService";
 
 const contentfulBatchSize = 10;
 
