@@ -1,1 +1,1 @@
-loader: node index.js
+loader: yarn load

@@ -70,9 +70,9 @@ SET NEO4J_SERVER=bolt://localhost    // defaults to GRAPHENEDB_BOLT_URL then  bo
 SET CONTENTFUL_BATCH_SIZE=500 // defaults to 1000
 SET CONTENTFUL_DELAY=1000 // defaults to 2000 Time (ms) between calls to avoid rate limit.
 
-npm install
+yarn
 
-node index.js
+yarn load
 ```
 
 The contentful access token is the read-only publish token (it currently does not work with the preview api).
