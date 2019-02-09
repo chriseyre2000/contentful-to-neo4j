@@ -1,5 +1,5 @@
 require('babel-register')({
-    presets: [ 'env' ]
+    presets: [ '@babel/preset-env' ]
  });
  
  require('./app');
