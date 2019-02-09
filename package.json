@@ -17,7 +17,7 @@
     "url": "https://github.com/chriseyre2000/contentful-to-neo4j"
   },
   "dependencies": {
-    "bottleneck": "^2.6.0",
+    "bottleneck": "^2.16.1",
     "contentful": "^6.1.1",
     "neo4j-driver": "^1.6.1"
   },
