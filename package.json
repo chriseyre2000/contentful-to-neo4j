@@ -19,7 +19,7 @@
   "dependencies": {
     "bottleneck": "^2.6.0",
     "contentful": "^6.1.1",
-    "neo4j-driver": "^1.6.1"
+    "neo4j-driver": "^1.7.2"
   },
   "devDependencies": {
     "babel-jest": "^23.2.0",
