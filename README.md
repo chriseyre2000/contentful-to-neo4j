@@ -82,7 +82,7 @@ Known issues:
 - Embedded images are not referenced from markdown fields.
 - Commits to neo4j are currently in a single transaction so can be slow for large contentful spaces.
 
-Working with a graphene database hosted in heroku
+Working with a graphene database hosted in heroku 
 =================================================
 
 If you want to have you neo4j server running in a hosted environment then you can try and use the Graphene addon to Heroku:
