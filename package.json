@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "bottleneck": "^2.16.2",
-    "contentful": "^7.2.0",
+    "contentful": "^7.3.0",
     "neo4j-driver": "^1.6.1"
   },
   "devDependencies": {
