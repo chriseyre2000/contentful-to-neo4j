@@ -1,0 +1,24 @@
+
+digraph architecture {
+  rankdir=LR;
+
+  // Client-side Apps - #FFEB3B (yellow)
+  node[fillcolor="#FFEB3B" style="filled" fontcolor="black"];
+
+
+  // Storage - #303F9F (dark blue)
+  node[fillcolor="#303F9F" style="filled" fontcolor="white"];
+  contentful[label="Contentful Space"];
+  neo[label="Neo4j"];
+  
+
+  // Microservices - #C8E6C9 (light green)
+  node[fillcolor="#C8E6C9" style="filled" fontcolor="black"];
+  contentful_to_neo4j[label="Contentful to Neo4j"]
+
+  subgraph microservices {
+      contentful
+         -> contentful_to_neo4j 
+         -> neo;
+  }
+}

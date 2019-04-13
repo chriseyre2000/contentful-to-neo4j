@@ -1,0 +1,8 @@
+digraph key {
+
+    ui[label="User Interface" fillcolor="#FFEB3B" style="filled" fontcolor="black"];
+    storage[label="Storage" fillcolor="#303F9F" style="filled" fontcolor="white"];
+    service[label="Service" fillcolor="#C8E6C9" style="filled" fontcolor="black"];
+    rabbit[label="Rabbit" fillcolor="#FF0000" style="filled" fontcolor="black"];
+
+}

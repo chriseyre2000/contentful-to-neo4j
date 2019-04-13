@@ -7,6 +7,15 @@ The practical uses are visualization and a powerful query language.
 You can easily find orphan entities.
 This allows writing reports against Contentful Data.
 
+## Architecture Diagram
+ 
+ ![architecture](./docs/architecture.png)
+ 
+ ### Key
+ 
+ ![key](./docs/key.png)
+
+
 Why do I need this?
 ===================
 
