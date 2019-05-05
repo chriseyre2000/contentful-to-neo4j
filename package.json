@@ -29,6 +29,6 @@
     "@babel/register": "^7.4.4",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^24.7.1",
-    "jest": "^24.7.1"
+    "jest": "^24.8.0"
   }
 }
