@@ -20,7 +20,7 @@
   "dependencies": {
     "bottleneck": "^2.18.1",
     "contentful": "^7.6.0",
-    "neo4j-driver": "^1.7.4"
+    "neo4j-driver": "^1.7.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
