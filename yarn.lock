@@ -1442,10 +1442,10 @@ contentful-sdk-core@^6.3.6:
     lodash "^4.17.10"
     qs "^6.5.2"
 
-contentful@^7.8.1:
-  version "7.8.1"
-  resolved "https://registry.yarnpkg.com/contentful/-/contentful-7.8.1.tgz#879881ccc3c1fb3ecd886c121e1c6297ef884643"
-  integrity sha512-HHQ8kxcJ4YITiBUTChY/bxAZVxSGf9wv4aBg9XmlFmebbKijF1hAY5h4vlcE0EgrxG8nHnSOK1RlsUjaDym39w==
+contentful@^7.8.2:
+  version "7.8.2"
+  resolved "https://registry.yarnpkg.com/contentful/-/contentful-7.8.2.tgz#70ecedff129a1a4c81e4b01e616b08b789a16da8"
+  integrity sha512-8aaCOxk2FJv5mDZlPh9s6BKj6rkjqGghtVuKXwx/sEYRQZVBsvvQgq+pMnN5XvTE2EHPEfu6C9d5J5cvbWlOjg==
   dependencies:
     axios "^0.19.0"
     contentful-resolve-response "^1.1.4"
