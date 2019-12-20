@@ -1465,14 +1465,15 @@ contentful-sdk-core@^6.4.0:
     lodash "^4.17.10"
     qs "^6.5.2"
 
-contentful@^7.11.2:
-  version "7.11.2"
-  resolved "https://registry.yarnpkg.com/contentful/-/contentful-7.11.2.tgz#700a5d39a0b13e5590111c647aac21845d00b597"
-  integrity sha512-hdSeJhPnP3DPsNwFjKywAdAFmzUAwJ6TeuoQ2gGHYY2Jvvph1e/qBWhlxC00UDanIotuT4O/HtvqFwsaIZ4bKw==
+contentful@^7.11.3:
+  version "7.11.3"
+  resolved "https://registry.yarnpkg.com/contentful/-/contentful-7.11.3.tgz#92b70082ee58d5f5c296d5b644474991d31787ce"
+  integrity sha512-W00MGAh2uBk3yw7+ZbCk723MmvgVrJ1yA2usOAhRqrB7Cj0Ndt+uWI9wQT8h4hr4i1lYclV5uf+3avU8QoMDtg==
   dependencies:
     axios "^0.19.0"
     contentful-resolve-response "^1.1.4"
     contentful-sdk-core "^6.4.0"
+    json-stringify-safe "^5.0.1"
     lodash "^4.17.11"
 
 convert-source-map@^1.1.0, convert-source-map@^1.4.0, convert-source-map@^1.7.0:
@@ -2849,7 +2850,7 @@ json-schema@0.2.3:
   resolved "https://registry.yarnpkg.com/json-schema/-/json-schema-0.2.3.tgz#b480c892e59a2f05954ce727bd3f2a4e882f9e13"
   integrity sha1-tIDIkuWaLwWVTOcnvT8qTogvnhM=
 
-json-stringify-safe@~5.0.1:
+json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
