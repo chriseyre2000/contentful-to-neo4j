@@ -27,7 +27,7 @@
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.5",
     "@babel/register": "7.9.0",
-    "babel-jest": "25.2.6",
+    "babel-jest": "25.3.0",
     "jest": "25.3.0"
   }
 }
