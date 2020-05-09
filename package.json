@@ -6,7 +6,7 @@
   "scripts": {
     "build": "./node_modules/.bin/babel src -d lib",
     "test": "jest",
-    "load": "node lib/app"
+    "load": "node -r esm src/app"
   },
   "jest": {
     "collectCoverage": true
@@ -20,6 +20,7 @@
   "dependencies": {
     "bottleneck": "2.19.5",
     "contentful": "7.14.4",
+    "esm": "^3.2.25",
     "neo4j-driver": "4.0.2"
   },
   "devDependencies": {
