@@ -3423,10 +3423,10 @@ needle@^2.2.1:
     iconv-lite "^0.4.4"
     sax "^1.2.4"
 
-neo4j-driver@4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-4.0.2.tgz#78de3b91e91572bcbd9d2e02554322fe1ab399ea"
-  integrity sha512-xQN4BZZsweaNNac7FDYAV6f/JybghwY3lk4fwblS8V5KQ+DBMPe4Pthh672mp+wEYZGyzPalq5CfpcBrWaZ4Gw==
+neo4j-driver@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-4.1.2.tgz#b7dc520a8b64b7dccd143058cf6cdf6fd6cb9ccd"
+  integrity sha512-hD13lwOuWi53IorgxL0/7HdBrR74VsQTMzZbp45a5e+vhciGtkqsfPH4oy33g+UOeORmxQ1y/lLnKpYe0Ll6xg==
   dependencies:
     "@babel/runtime" "^7.5.5"
     rxjs "^6.5.2"
