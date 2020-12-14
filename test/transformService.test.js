@@ -15,7 +15,7 @@ test("If contentful is empty then nothing is sent to the db", (done) => {
 
   contentfulService.getAssets.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
   contentfulService.getEntries.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
-  
+
   const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log, systemService);
 
   transformService.copyContentfulSpaceToNeo4j();
@@ -27,7 +27,7 @@ test("If contentful is empty then nothing is sent to the db", (done) => {
     expect(neo4jService.cypherCommand.mock.calls.length).toEqual(0);
 
     done();
-  }, 
+  },
   1);
 });
 
@@ -43,7 +43,7 @@ test("Can call multiple batches of assets and entries", (done) => {
 
   contentfulService.getAssets.mockReturnValue( assetResult);
   contentfulService.getEntries.mockReturnValue( entryResult );
-  
+
   const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log, systemService);
 
   transformService.copyContentfulSpaceToNeo4j();
@@ -60,21 +60,21 @@ test("Can call multiple batches of assets and entries", (done) => {
     expect(neo4jService.cypherCommand.mock.calls.length).toEqual(0);
 
     done();
-  }, 
+  },
   1);
 });
 
 test('Check Process Empty Assets Calls Entries', (done) => {
-  
+
   const contentfulService = mockContentfulServiceFactory();
   const neo4jService = mockNeo4jServiceFactory();
   const log = mockLogFactory();
   const systemService = mockSystemServiceFactory();
 
   contentfulService.getAssets.mockReturnValue( Promise.resolve(contentfulService.emptyResult) );
-  
+
   contentfulService.getEntries.mockReturnValue( Promise.resolve(contentfulService.emptyResult) );
-  
+
   const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log, systemService);
 
   transformService.copyContentfulSpaceToNeo4j();
@@ -94,7 +94,7 @@ test("If contentful is empty then nothing is sent to the db", (done) => {
 
   contentfulService.getAssets.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
   contentfulService.getEntries.mockReturnValue( Promise.resolve(contentfulService.emptyResult));
-  
+
   const transformService = transformServiceFactory(contentfulService, neo4jService, contentfulBatchSize, log, systemService);
 
   transformService.copyContentfulSpaceToNeo4j();
@@ -106,7 +106,7 @@ test("If contentful is empty then nothing is sent to the db", (done) => {
     expect(neo4jService.cypherCommand.mock.calls.length).toEqual(0);
 
     done();
-  }, 
+  },
   1);
 });
 
@@ -124,7 +124,7 @@ test("processRelationships", (done) => {
   const assets = {
     total: 0,
     items: [
-      asset1, 
+      asset1,
       asset2
     ],
   }
@@ -134,14 +134,14 @@ test("processRelationships", (done) => {
 
     arrayField: [
       assetFieldFactory("asset-id-1"),
-      assetFieldFactory("asset-id-2") 
+      assetFieldFactory("asset-id-2")
     ],
   });
 
   const entries = {
     total: 1,
     items: [
-      entry, 
+      entry,
     ],
   }
 
@@ -194,14 +194,24 @@ test("process entries", (done) => {
 
   setTimeout( () => {
     expect(log.mock.calls.length).toEqual(7);
-    expect(log.mock.calls[0][0]).toEqual("fetch Assets 0");
-    expect(log.mock.calls[1][0]).toEqual("Assets: 0 of 0 0");
-    expect(log.mock.calls[2][0]).toEqual("processAssets 0 1000 0");
-    expect(log.mock.calls[3][0]).toEqual("fetch Entries 0 10");
-    expect(log.mock.calls[4][0]).toEqual("Entries: 1 of 1 0");
-    expect(log.mock.calls[5][0]).toEqual("processEntries 0 10 1");
-    expect(log.mock.calls[6][0]).toEqual("We found 0 relationships");
 
+    expect([
+      log.mock.calls[0][0],
+      log.mock.calls[1][0],
+      log.mock.calls[2][0],
+      log.mock.calls[3][0],
+      log.mock.calls[4][0],
+      log.mock.calls[5][0],
+      log.mock.calls[6][0],
+    ]).toStrictEqual([
+      "fetch Assets 0",
+      "Assets: 0 of 0 0",
+      "processAssets 0 1000 0",
+      "fetch Entries 0 10",
+      "Entries: 1 of 1 0",
+      "processEntries 0 10 1",
+      "We found 0 relationships"
+    ])
     expect(neo4jService.cypherCommand.mock.calls.length).toEqual(1);
     done();
   }, 1);
@@ -225,10 +235,10 @@ test("Get Assets fails", (done) => {
   setTimeout( () => {
     expect(log.mock.calls.length).toEqual(2);
     expect(log.mock.calls[0][0]).toEqual("fetch Assets 0");
-    expect(log.mock.calls[1][0]).toEqual("Fetch assets failed with Because at skip 0");
+    expect(log.mock.calls[1][0]).toEqual("Fetch assets failed with \"Because\" at skip 0");
     expect(systemService.systemExit.mock.calls.length).toEqual(1);
     done();
-  }, 
+  },
   1);
 
 });
@@ -250,13 +260,23 @@ test("Get Entries fails", (done) => {
 
   setTimeout( () => {
     expect(log.mock.calls.length).toEqual(5);
-    expect(log.mock.calls[0][0]).toEqual("fetch Assets 0");
-    expect(log.mock.calls[1][0]).toEqual("Assets: 0 of 0 0");
-    expect(log.mock.calls[2][0]).toEqual("processAssets 0 1000 0");
-    expect(log.mock.calls[3][0]).toEqual("fetch Entries 0 10");
-    expect(log.mock.calls[4][0]).toEqual("Fetch entries failed with Because at skip 0 10");   
+
+    expect( [
+      log.mock.calls[0][0],
+      log.mock.calls[1][0],
+      log.mock.calls[2][0],
+      log.mock.calls[3][0],
+      log.mock.calls[4][0],
+    ]).toStrictEqual([
+      "fetch Assets 0",
+      "Assets: 0 of 0 0",
+      "processAssets 0 1000 0",
+      "fetch Entries 0 10",
+      "Fetch entries failed with Because at skip 0 10",
+    ])
+
     expect(systemService.systemExit.mock.calls.length).toEqual(1);
     done();
-  }, 
+  },
   1);
 });
