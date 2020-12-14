@@ -5,7 +5,7 @@ import {
 } from "./contentfulTransform";
 
 const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, systemService) => {
-    
+
     var targetBatchSize = contentfulBatchSize;
 
     // This is the main entry point
@@ -20,23 +20,20 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, sy
         const handleAssets = assets => {
             processAssets(assets, skip)
         };
-        
+
         const handleFailure = reason => {
             log(`Fetch assets failed with ${ JSON.stringify(reason)} at skip ${skip}`);
             systemService.systemExit(1);
         };
 
-        console.log('Before contentful.getAssets')
         contentful.getAssets(assetBatchSize, skip)
             .then(handleAssets, handleFailure)
             .catch(console.log);
     };
 
     const processAssets = (assets, skip) => {
-        log('assets', JSON.stringify(assets))
-        
         log(`Assets: ${assets.items.length} of ${assets.total} ${skip}`);
-        
+
         assets.items.forEach(asset => processAsset(neo4j, asset));
 
         log(`processAssets ${skip} ${assetBatchSize} ${assets.total}`);
@@ -66,7 +63,7 @@ const transformServiceFactory = (contentful, neo4j, contentfulBatchSize, log, sy
         log(`Entries: ${entries.items.length} of ${entries.total} ${skip}`);
 
         entries.items.forEach((entry) => {
-            processEntry(neo4j, storeRelationship, entry, log); 
+            processEntry(neo4j, storeRelationship, entry, log);
         });
 
         log(`processEntries ${skip} ${targetBatchSize} ${entries.total}`);

@@ -31,7 +31,7 @@ const tidyUp = (msg, status) => {
 const finish = () => {
   transaction.commit().then(
     result => {
-      //if (result) {console.log('neo4j commit', JSON.stringify(result)) }
+     if (result) {console.log('neo4j commit', JSON.stringify(result)) }
       // result.summary.notifications.forEach(n => {
       //   console.log(`${n.code} ${n.title} ${n.description} ${n.severity}`);
       // });
