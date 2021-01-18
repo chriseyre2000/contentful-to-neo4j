@@ -21,7 +21,7 @@
     "bottleneck": "2.19.5",
     "contentful": "8.1.7",
     "esm": "^3.2.25",
-    "neo4j-driver": "4.2.1"
+    "neo4j-driver": "4.2.2"
   },
   "devDependencies": {
     "@babel/cli": "7.12.10",
