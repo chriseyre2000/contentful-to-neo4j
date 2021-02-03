@@ -24,7 +24,7 @@
     "neo4j-driver": "4.2.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.12.10",
+    "@babel/cli": "7.12.13",
     "@babel/core": "7.12.10",
     "@babel/preset-env": "7.12.11",
     "@babel/register": "7.12.13",
