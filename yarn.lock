@@ -3452,10 +3452,10 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-neo4j-driver@4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-4.2.2.tgz#658dcb83fab95d1b1ceb29c23570fc3e6715a753"
-  integrity sha512-2XItlip3L8g4ONCu3XgrdhHAgPEomNFEzfc3oNkeKBTSHtykStwKkssWGZrwnZx+l0GbQ1KkeZBVqLtuxGK7wA==
+neo4j-driver@4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-4.2.3.tgz#238c98cef329ff0fb11f9884360c4ff4650b2409"
+  integrity sha512-HCJ7+J5V/5yhP+b6G2zTb7SKlAN/oLYaMkD8Bo8L9veScDtgDHBlbkbYEHf1YSAd67OfjZKeF9l84J8Kjdw91g==
   dependencies:
     "@babel/runtime" "^7.5.5"
     rxjs "^6.6.3"
