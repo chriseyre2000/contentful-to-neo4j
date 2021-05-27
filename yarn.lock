@@ -3381,15 +3381,28 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-neo4j-driver@4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-4.2.3.tgz#238c98cef329ff0fb11f9884360c4ff4650b2409"
-  integrity sha512-HCJ7+J5V/5yhP+b6G2zTb7SKlAN/oLYaMkD8Bo8L9veScDtgDHBlbkbYEHf1YSAd67OfjZKeF9l84J8Kjdw91g==
+neo4j-driver-bolt-connection@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/neo4j-driver-bolt-connection/-/neo4j-driver-bolt-connection-4.3.0.tgz#150089f92eb094792a63f62b9a8f0c34725380f3"
+  integrity sha512-MTzixvHoZNmYbWgUeggXFUhgetr5BlVZ9hY5pWCnkttoTwS21D/ygs+oDyn3tJKvNd8INRsrwKh4dG3izvp2Xg==
+  dependencies:
+    neo4j-driver-core "^4.3.0"
+    text-encoding-utf-8 "^1.0.2"
+
+neo4j-driver-core@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/neo4j-driver-core/-/neo4j-driver-core-4.3.0.tgz#a6d33f604dec7cf3b200bb14c1ac42292b3ab488"
+  integrity sha512-XJULrmfeTtDKonchufDqTpf5qQ93RI5vbyOxZ/S4VospfKGeWsl6KmwXvp3fY1nCKWTny/Ekm4hw1vod2XyZEA==
+
+neo4j-driver@4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-4.3.0.tgz#367e80925c671d364ecd406d049958469c7ce577"
+  integrity sha512-vG+KsKQXTAIwhspMQw4pFVJ+Mr8XrBC2vPw19C+WVUR2qx5w+zynB2WxOyFI+9oxya9B5xCWxgQ4I5KyMDtElw==
   dependencies:
     "@babel/runtime" "^7.5.5"
+    neo4j-driver-bolt-connection "^4.3.0"
+    neo4j-driver-core "^4.3.0"
     rxjs "^6.6.3"
-    text-encoding-utf-8 "^1.0.2"
-    uri-js "^4.4.0"
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -3666,7 +3679,7 @@ psl@^1.1.33:
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
   integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
 
-punycode@^2.1.0, punycode@^2.1.1:
+punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
@@ -4276,13 +4289,6 @@ upath@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.2.tgz#3db658600edaeeccbe6db5e684d67ee8c2acd068"
   integrity sha512-kXpym8nmDmlCBr7nKdIx8P2jNBa+pBpIUFRnKJ4dr8htyYGJFokkr2ZvERRtUN+9SY+JqXouNgUPtv6JQva/2Q==
-
-uri-js@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.0.tgz#aa714261de793e8a82347a7bcc9ce74e86f28602"
-  integrity sha512-B0yRTzYdUCCn9n+F4+Gh4yIDtMQcaJsmYBDsTSG8g/OejKBodLQ2IHfN3bM7jUsRXndopT7OIXWdYqc1fjmV6g==
-  dependencies:
-    punycode "^2.1.0"
 
 urix@^0.1.0:
   version "0.1.0"
